@@ -19,6 +19,7 @@ services:
     environment:
       POSTGRES_USER: sara
       POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: SampleDB
       PGDATA: /data/postgres
     volumes:
        - postgres_data:/data/postgres
