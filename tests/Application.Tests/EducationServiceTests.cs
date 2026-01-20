@@ -132,5 +132,93 @@ namespace Application.Tests
             A.CallTo(() => unitOfWork.Education.Delete(existingEducation)).MustHaveHappenedOnceExactly();
             A.CallTo(() => unitOfWork.SaveChangesAsync(default)).MustHaveHappenedOnceExactly();
         }
+
+        [Fact]
+        public async Task GetById_With_NonExistent_Id_Returns_Null()
+        {
+            // Arrange
+            var nonExistentId = Guid.NewGuid();
+            A.CallTo(() => educationRepository.GetById(nonExistentId)).Returns((Education?)null);
+            var educationService = new EducationService(unitOfWork);
+
+            // Act
+            var result = await educationService.GetById(nonExistentId);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task Update_For_NonExistent_Entity_Returns_False()
+        {
+            // Arrange
+            var nonExistentId = Guid.NewGuid();
+            var educationDto = A.Dummy<EducationDto>();
+            educationDto.Id = nonExistentId;
+            A.CallTo(() => educationRepository.GetById(nonExistentId)).Returns((Education?)null);
+
+            var educationService = new EducationService(unitOfWork);
+
+            // Act
+            var result = await educationService.Update(nonExistentId, educationDto);
+
+            // Assert
+            Assert.False(result);
+            A.CallTo(() => unitOfWork.Education.Update(A<Education>._)).MustNotHaveHappened();
+            A.CallTo(() => unitOfWork.SaveChangesAsync(default)).MustNotHaveHappened();
+        }
+
+        [Fact]
+        public async Task Delete_With_NonExistent_Id_Returns_False()
+        {
+            // Arrange
+            var nonExistentId = Guid.NewGuid();
+            A.CallTo(() => educationRepository.GetById(nonExistentId)).Returns((Education?)null);
+
+            var educationService = new EducationService(unitOfWork);
+
+            // Act
+            var result = await educationService.Delete(nonExistentId);
+
+            // Assert
+            Assert.False(result);
+            A.CallTo(() => unitOfWork.Education.Delete(A<Education>._)).MustNotHaveHappened();
+            A.CallTo(() => unitOfWork.SaveChangesAsync(default)).MustNotHaveHappened();
+        }
+
+        [Fact]
+        public async Task Update_With_Null_Model_Returns_False()
+        {
+            // Arrange
+            var existingId = Guid.NewGuid();
+            var educationService = new EducationService(unitOfWork);
+
+            // Act
+            var result = await educationService.Update(existingId, null!);
+
+            // Assert
+            Assert.False(result);
+            A.CallTo(() => unitOfWork.Education.GetById(A<Guid>._)).MustNotHaveHappened();
+            A.CallTo(() => unitOfWork.Education.Update(A<Education>._)).MustNotHaveHappened();
+            A.CallTo(() => unitOfWork.SaveChangesAsync(default)).MustNotHaveHappened();
+        }
+
+        [Fact]
+        public async Task Add_Calls_SaveChangesAsync()
+        {
+            // Arrange
+            var educationDto = A.Dummy<EducationDto>();
+            var addedEducation = educationDto.Adapt<Education>();
+            addedEducation.Id = Guid.NewGuid();
+            A.CallTo(() => educationRepository.Add(A<Education>._)).Returns(addedEducation);
+
+            var educationService = new EducationService(unitOfWork);
+
+            // Act
+            await educationService.Add(educationDto);
+
+            // Assert
+            A.CallTo(() => unitOfWork.SaveChangesAsync(default)).MustHaveHappenedOnceExactly();
+        }
     }
 }
