@@ -132,5 +132,89 @@ namespace Application.Tests
             A.CallTo(() => unitOfWork.Education.Delete(existingEducation)).MustHaveHappenedOnceExactly();
             A.CallTo(() => unitOfWork.SaveChangesAsync(default)).MustHaveHappenedOnceExactly();
         }
+
+        [Fact]
+        public async Task GetStatistics_Returns_EducationStatisticsDto()
+        {
+            // Arrange
+            var educationData = new List<Education>
+            {
+                new Education { Id = Guid.NewGuid(), Degree = "Bachelor's", School = "MIT", FieldOfStudy = "CS" },
+                new Education { Id = Guid.NewGuid(), Degree = "Bachelor's", School = "MIT", FieldOfStudy = "Math" },
+                new Education { Id = Guid.NewGuid(), Degree = "Master's", School = "Stanford", FieldOfStudy = "CS" }
+            };
+            A.CallTo(() => educationRepository.GetAll()).Returns(educationData);
+            var educationService = new EducationService(unitOfWork);
+
+            // Act
+            var result = await educationService.GetStatistics();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(3, result.TotalCount);
+            Assert.Equal(2, result.DegreeCounts["Bachelor's"]);
+            Assert.Equal(1, result.DegreeCounts["Master's"]);
+            Assert.Equal("MIT", result.MostCommonSchools[0].School);
+        }
+
+        [Fact]
+        public async Task Search_Returns_Matching_Results()
+        {
+            // Arrange
+            var educationData = new List<Education>
+            {
+                new Education { Id = Guid.NewGuid(), Degree = "Bachelor's", School = "MIT", FieldOfStudy = "Computer Science" },
+                new Education { Id = Guid.NewGuid(), Degree = "Master's", School = "Stanford", FieldOfStudy = "Mathematics" }
+            };
+            A.CallTo(() => educationRepository.GetAll()).Returns(educationData);
+            var educationService = new EducationService(unitOfWork);
+
+            // Act
+            var result = await educationService.Search("Computer");
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Single(result);
+        }
+
+        [Fact]
+        public async Task Search_With_No_Match_Returns_Empty()
+        {
+            // Arrange
+            var educationData = new List<Education>
+            {
+                new Education { Id = Guid.NewGuid(), Degree = "Bachelor's", School = "MIT", FieldOfStudy = "CS" }
+            };
+            A.CallTo(() => educationRepository.GetAll()).Returns(educationData);
+            var educationService = new EducationService(unitOfWork);
+
+            // Act
+            var result = await educationService.Search("Nonexistent");
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public async Task GetTimelineByUserId_Returns_Sorted_By_StartDate()
+        {
+            // Arrange
+            var educationData = new List<Education>
+            {
+                new Education { Id = Guid.NewGuid(), Degree = "Master's", School = "Stanford", FieldOfStudy = "CS", StartDate = new DateTime(2020, 1, 1) },
+                new Education { Id = Guid.NewGuid(), Degree = "Bachelor's", School = "MIT", FieldOfStudy = "CS", StartDate = new DateTime(2016, 1, 1) }
+            };
+            A.CallTo(() => educationRepository.GetAll()).Returns(educationData);
+            var educationService = new EducationService(unitOfWork);
+
+            // Act
+            var result = (await educationService.GetTimelineByUserId(Guid.NewGuid())).ToList();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
+            Assert.True(result[0].StartDate < result[1].StartDate);
+        }
     }
 }

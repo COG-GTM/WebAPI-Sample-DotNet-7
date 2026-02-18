@@ -4,6 +4,10 @@ using Application.Service;
 using Infrastructure.DbContexts;
 using Infrastructure.UoW;
 using Microsoft.EntityFrameworkCore;
+using WebApi.GraphQL.Queries;
+using WebApi.GraphQL.Mutations;
+using WebApi.GraphQL.Subscriptions;
+using WebApi.GraphQL.Types;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +26,16 @@ builder.Services.AddScoped<IEducationService, EducationService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// GraphQL
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<EducationQueries>()
+    .AddMutationType<EducationMutations>()
+    .AddSubscriptionType<EducationSubscriptions>()
+    .AddType<EducationType>()
+    .AddType<EducationStatisticsType>()
+    .AddInMemorySubscriptions();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,6 +49,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseWebSockets();
+
 app.MapControllers();
+app.MapGraphQL();
+app.MapBananaCakePop("/graphql-ui");
 
 app.Run();

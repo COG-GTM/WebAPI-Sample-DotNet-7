@@ -9,5 +9,8 @@ namespace Application.Service.Interfaces
         Task<EducationDto> Add(EducationDto model);
         Task<bool> Update(Guid id, EducationDto model);
         Task<bool> Delete(Guid id);
+        Task<EducationStatisticsDto> GetStatistics();
+        Task<IEnumerable<EducationDto>> Search(string query);
+        Task<IEnumerable<EducationDto>> GetTimelineByUserId(Guid userId);
     }
 }

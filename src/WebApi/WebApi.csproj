@@ -14,6 +14,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="13.9.0" />
+    <PackageReference Include="HotChocolate.Subscriptions" Version="13.9.0" />
+    <PackageReference Include="HotChocolate.Subscriptions.InMemory" Version="13.9.0" />
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
   </ItemGroup>
 
   <ItemGroup>
