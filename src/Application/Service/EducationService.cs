@@ -58,5 +58,50 @@ namespace Application.Service
             await _unitOfWork.SaveChangesAsync();
             return true;
         }
+
+        public async Task<EducationStatisticsDto> GetStatistics()
+        {
+            var allEducations = await _unitOfWork.Education.GetAll();
+            var educationList = allEducations.ToList();
+
+            var degreeCounts = educationList
+                .Where(e => !string.IsNullOrEmpty(e.Degree))
+                .GroupBy(e => e.Degree!)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            var mostCommonSchools = educationList
+                .Where(e => !string.IsNullOrEmpty(e.School))
+                .GroupBy(e => e.School!)
+                .OrderByDescending(g => g.Count())
+                .Take(5)
+                .Select(g => new SchoolCountDto { School = g.Key, Count = g.Count() })
+                .ToList();
+
+            return new EducationStatisticsDto
+            {
+                TotalCount = educationList.Count,
+                DegreeCounts = degreeCounts,
+                MostCommonSchools = mostCommonSchools
+            };
+        }
+
+        public async Task<IEnumerable<EducationDto>> Search(string query)
+        {
+            var allEducations = await _unitOfWork.Education.GetAll();
+            var filtered = allEducations.Where(e =>
+                (e.Degree != null && e.Degree.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
+                (e.School != null && e.School.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
+                (e.FieldOfStudy != null && e.FieldOfStudy.Contains(query, StringComparison.OrdinalIgnoreCase)));
+            return filtered.Adapt<List<EducationDto>>();
+        }
+
+        public async Task<IEnumerable<EducationDto>> GetTimelineByUserId(Guid userId)
+        {
+            var allEducations = await _unitOfWork.Education.GetAll();
+            var sorted = allEducations
+                .OrderBy(e => e.StartDate)
+                .ToList();
+            return sorted.Adapt<List<EducationDto>>();
+        }
     }
 }

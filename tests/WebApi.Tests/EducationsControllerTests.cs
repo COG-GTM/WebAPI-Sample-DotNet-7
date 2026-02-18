@@ -233,5 +233,225 @@ namespace WebApi.Tests
             Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
         }
         #endregion
+
+        #region Statistics
+        [Fact]
+        public async Task GetStatistics_Returns_Ok()
+        {
+            // Arrange
+            var stats = A.Dummy<EducationStatisticsDto>();
+            A.CallTo(() => educationService.GetStatistics()).Returns(stats);
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.GetStatistics();
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            Assert.IsAssignableFrom<EducationStatisticsDto>(okResult.Value);
+        }
+
+        [Fact]
+        public async Task GetStatistics_On_Exception_Returns_InternalServerError()
+        {
+            // Arrange
+            A.CallTo(() => educationService.GetStatistics()).Throws(new Exception());
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.GetStatistics();
+
+            // Assert
+            var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
+            Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
+        }
+        #endregion
+
+        #region Search
+        [Fact]
+        public async Task Search_With_Valid_Query_Returns_Ok()
+        {
+            // Arrange
+            var dummyData = A.CollectionOfDummy<EducationDto>(2);
+            A.CallTo(() => educationService.Search("Computer")).Returns(dummyData);
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.Search("Computer");
+
+            // Assert
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task Search_With_Empty_Query_Returns_BadRequest()
+        {
+            // Arrange
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.Search("");
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task Search_On_Exception_Returns_InternalServerError()
+        {
+            // Arrange
+            A.CallTo(() => educationService.Search(A<string>._)).Throws(new Exception());
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.Search("test");
+
+            // Assert
+            var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
+            Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
+        }
+        #endregion
+
+        #region Timeline
+        [Fact]
+        public async Task GetTimeline_Returns_Ok()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var dummyData = A.CollectionOfDummy<EducationDto>(2);
+            A.CallTo(() => educationService.GetTimelineByUserId(userId)).Returns(dummyData);
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.GetTimeline(userId);
+
+            // Assert
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task GetTimeline_On_Exception_Returns_InternalServerError()
+        {
+            // Arrange
+            A.CallTo(() => educationService.GetTimelineByUserId(A<Guid>._)).Throws(new Exception());
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.GetTimeline(Guid.NewGuid());
+
+            // Assert
+            var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
+            Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
+        }
+        #endregion
+
+        #region Export
+        [Fact]
+        public async Task Export_With_Empty_Format_Returns_BadRequest()
+        {
+            // Arrange
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.Export("");
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task Export_With_Unsupported_Format_Returns_BadRequest()
+        {
+            // Arrange
+            var dummyData = A.CollectionOfDummy<EducationDto>(1);
+            A.CallTo(() => educationService.GetAll()).Returns(dummyData);
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.Export("xml");
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task Export_Csv_Returns_FileResult()
+        {
+            // Arrange
+            var dummyData = A.CollectionOfDummy<EducationDto>(1);
+            A.CallTo(() => educationService.GetAll()).Returns(dummyData);
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.Export("csv");
+
+            // Assert
+            var fileResult = Assert.IsType<FileContentResult>(result);
+            Assert.Equal("text/csv", fileResult.ContentType);
+        }
+
+        [Fact]
+        public async Task Export_Json_Returns_FileResult()
+        {
+            // Arrange
+            var dummyData = A.CollectionOfDummy<EducationDto>(1);
+            A.CallTo(() => educationService.GetAll()).Returns(dummyData);
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.Export("json");
+
+            // Assert
+            var fileResult = Assert.IsType<FileContentResult>(result);
+            Assert.Equal("application/json", fileResult.ContentType);
+        }
+
+        [Fact]
+        public async Task Export_On_Exception_Returns_InternalServerError()
+        {
+            // Arrange
+            A.CallTo(() => educationService.GetAll()).Throws(new Exception());
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.Export("csv");
+
+            // Assert
+            var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
+            Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
+        }
+        #endregion
+
+        #region Import
+        [Fact]
+        public async Task Import_With_Null_File_Returns_BadRequest()
+        {
+            // Arrange
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.Import(null!);
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task Import_With_Unsupported_Format_Returns_BadRequest()
+        {
+            // Arrange
+            var fileMock = A.Fake<IFormFile>();
+            A.CallTo(() => fileMock.FileName).Returns("test.xml");
+            A.CallTo(() => fileMock.Length).Returns(100);
+            A.CallTo(() => fileMock.OpenReadStream()).Returns(new MemoryStream());
+            var controller = new EducationsController(educationService);
+
+            // Act
+            var result = await controller.Import(fileMock);
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+        #endregion
     }
 }
