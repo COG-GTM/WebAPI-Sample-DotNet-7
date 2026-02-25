@@ -29,7 +29,7 @@ namespace Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Educations",
                 columns: new[] { "Id", "Degree", "Description", "FieldOfStudy", "School" },
-                values: new object[] { new Guid("f0ea951a-788b-4348-9e93-6a0f3dcca377"), "Bachelor's degree", null, "Software engineering", "Sample university" });
+                values: new object[] { new Guid("c92ea179-5be9-4a80-8991-0e2679c83b9c"), "Bachelor's degree", null, "Software engineering", "Sample university" });
         }
 
         /// <inheritdoc />

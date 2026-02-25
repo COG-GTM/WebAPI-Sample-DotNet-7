@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SampleDbContext))]
-    [Migration("20260225130414_Initialize")]
+    [Migration("20260225131828_Initialize")]
     partial class Initialize
     {
         /// <inheritdoc />
@@ -57,7 +57,7 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f0ea951a-788b-4348-9e93-6a0f3dcca377"),
+                            Id = new Guid("c92ea179-5be9-4a80-8991-0e2679c83b9c"),
                             Degree = "Bachelor's degree",
                             FieldOfStudy = "Software engineering",
                             School = "Sample university"
