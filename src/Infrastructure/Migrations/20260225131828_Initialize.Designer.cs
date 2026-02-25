@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SampleDbContext))]
-    [Migration("20240113141226_Initialize")]
+    [Migration("20260225131828_Initialize")]
     partial class Initialize
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "10.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -57,7 +57,7 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c92ea179-dd5c-46ca-b7b5-b44a191b974c"),
+                            Id = new Guid("c92ea179-5be9-4a80-8991-0e2679c83b9c"),
                             Degree = "Bachelor's degree",
                             FieldOfStudy = "Software engineering",
                             School = "Sample university"
