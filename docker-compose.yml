@@ -11,6 +11,7 @@ services:
     environment:
       - ConnectionStrings__DefaultConnection=Server=mysql_container;Port=3306;Database=SampleDB;User=sara;Password=mysecretpassword
       - ASPNETCORE_URLS=http://+:5000
+      - ASPNETCORE_ENVIRONMENT=Development
     networks:
       - dev_network
   mysql_db:
