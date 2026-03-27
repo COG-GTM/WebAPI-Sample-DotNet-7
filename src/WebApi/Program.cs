@@ -26,11 +26,24 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Apply pending migrations on startup
+// Apply pending migrations on startup with retry for container environments
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<SampleDbContext>();
-    dbContext.Database.Migrate();
+    var retries = 10;
+    for (var i = 0; i < retries; i++)
+    {
+        try
+        {
+            dbContext.Database.Migrate();
+            break;
+        }
+        catch (Exception ex) when (i < retries - 1)
+        {
+            app.Logger.LogWarning(ex, "Database migration attempt {Attempt} failed, retrying in 5 seconds...", i + 1);
+            Thread.Sleep(5000);
+        }
+    }
 }
 
 // Configure the HTTP request pipeline.
