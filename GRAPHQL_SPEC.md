@@ -4,7 +4,7 @@
 
 ### Purpose
 
-This specification document outlines the design and implementation plan for adding a GraphQL API to the existing ASP.NET Core Web API (.NET 7) sample project. The GraphQL API will provide an alternative interface to the same underlying data and business logic that the REST API currently uses, with both APIs coexisting and sharing the same PostgreSQL database.
+This specification document outlines the design and implementation plan for adding a GraphQL API to the existing ASP.NET Core Web API (.NET 7) sample project. The GraphQL API will provide an alternative interface to the same underlying data and business logic that the REST API currently uses, with both APIs coexisting and sharing the same MySQL database.
 
 ### Current Architecture
 
@@ -113,7 +113,7 @@ Update `src/WebApi/WebApi.csproj` to include HotChocolate packages:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="7.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
       <PrivateAssets>all</PrivateAssets>
@@ -533,8 +533,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Database
-builder.Services.AddDbContext<SampleDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), o => o.UseNodaTime()));
-builder.Services.AddHealthChecks().AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection"), name: "SampleDB");
+builder.Services.AddDbContext<SampleDbContext>(options => options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 0))));
+builder.Services.AddHealthChecks().AddMySql(connectionString, name: "SampleDB");
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEducationService, EducationService>();
@@ -868,8 +868,8 @@ No changes required. The existing configuration exposes port 5000, which will se
 | GraphQL API | `http://localhost:5000/graphql` | New GraphQL endpoint |
 | GraphQL IDE | `http://localhost:5000/graphql-ui` | Banana Cake Pop (development only) |
 | Swagger UI | `http://localhost:5000/swagger` | REST API documentation |
-| PostgreSQL | `localhost:5433` | Database |
-| PgAdmin | `http://localhost:8080` | Database management |
+| MySQL | `localhost:3307` | Database |
+| Adminer | `http://localhost:8080` | Database management |
 
 ---
 
@@ -1015,7 +1015,7 @@ Both APIs will coexist and share the same underlying infrastructure:
                             │
                             ▼
                    ┌─────────────────┐
-                   │  PostgreSQL DB  │
+                   │    MySQL DB     │
                    └─────────────────┘
 ```
 

@@ -9,7 +9,7 @@ This repository is a sample ASP.NET Core Web API (.NET 7) project.
 - Unit Of Work Pattern
 - Repository Service Pattern
 - TDD
-- PostgreSQL
+- MySQL
 - Docker
 
 ## Get started
@@ -29,13 +29,13 @@ Run the following command in project directory:
 docker-compose up -d
 ```
 
-Docker compose in this project includes 3 services: web API application, postgres and pgadmin4.
+Docker compose in this project includes 3 services: web API application, MySQL and Adminer.
 
 - Web API application will be running and listening at `http://localhost:5000`
 
-- Postgres database will be listening at `http://localhost:5433`
+- MySQL database will be listening at `localhost:3307`
 
-- PgAdmin4 web interface will be listening at `http://localhost:8080`
+- Adminer web interface will be listening at `http://localhost:8080`
 
 
 To apply your modified code, you can add build option:
@@ -59,7 +59,7 @@ Open Sample.sln file in visual studio, then in package manager console tab, run:
 update-database
 ```
 
-This command will generate the database schema in postgres container.
+This command will generate the database schema in the MySQL container.
 
 ## Contributions
 Contributions are welcomed! If you identify areas for improvement, please feel free to raise an issue or submit a pull request.

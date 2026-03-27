@@ -4,50 +4,43 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - postgres_db
+      - mysql_db
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=User ID=sara;Password=mysecretpassword;Server=postgres_container;Port=5432;Database=SampleDB;IntegratedSecurity=true;Pooling=true;
+      - ConnectionStrings__DefaultConnection=Server=mysql_container;Port=3306;Database=SampleDB;User=sara;Password=mysecretpassword
       - ASPNETCORE_URLS=http://+:5000
     networks:
       - dev_network
-  postgres_db:
-    container_name: postgres_container
-    image: postgres
+  mysql_db:
+    container_name: mysql_container
+    image: mysql:8.0
     environment:
-      POSTGRES_USER: sara
-      POSTGRES_PASSWORD: mysecretpassword
-      PGDATA: /data/postgres
+      MYSQL_ROOT_PASSWORD: mysecretpassword
+      MYSQL_DATABASE: SampleDB
+      MYSQL_USER: sara
+      MYSQL_PASSWORD: mysecretpassword
     volumes:
-       - postgres_data:/data/postgres
+      - mysql_data:/var/lib/mysql
     ports:
-      - "5433:5432"
+      - "3307:3306"
     networks:
       - dev_network
     restart: unless-stopped
-  
-  pgadmin:
-    container_name: pgadmin_container
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: mysecretpassword
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
 
+  adminer:
+    container_name: adminer_container
+    image: adminer
     ports:
-      - "8080:80"
+      - "8080:8080"
     networks:
       - dev_network
     restart: unless-stopped
-    
+
 networks:
   dev_network:
     driver: bridge
 
 volumes:
-  postgres_data:
-  pgadmin_data:
+  mysql_data:
