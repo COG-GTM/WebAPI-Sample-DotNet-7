@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/http"
 
@@ -113,11 +114,15 @@ func (h *EducationHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-// writeJSON is a small helper that encodes v as JSON and writes it to w.
+// writeJSON encodes v as JSON into a buffer before writing headers,
+// so that encoding errors can still produce a proper 500 response.
 func writeJSON(w http.ResponseWriter, status int, v any) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	if err := json.NewEncoder(w).Encode(v); err != nil {
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(v); err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
 	}
+	w.WriteHeader(status)
+	_, _ = w.Write(buf.Bytes())
 }
