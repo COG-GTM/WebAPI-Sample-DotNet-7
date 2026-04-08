@@ -24,6 +24,26 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Apply pending migrations on startup (with retry for Docker Compose startup ordering)
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<SampleDbContext>();
+    var retries = 5;
+    for (var i = 0; i < retries; i++)
+    {
+        try
+        {
+            dbContext.Database.Migrate();
+            break;
+        }
+        catch (Exception ex) when (i < retries - 1)
+        {
+            app.Logger.LogWarning(ex, "Database migration attempt {Attempt} failed. Retrying in 3 seconds...", i + 1);
+            Thread.Sleep(3000);
+        }
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
