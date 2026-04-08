@@ -14,11 +14,11 @@ namespace Infrastructure.DbContexts
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            // Seed
+            // Seed (use a fixed GUID to avoid EF Core PendingModelChangesWarning)
             modelBuilder.Entity<Education>().HasData(
                 new Education
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("c92ea179-dd5c-46ca-b7b5-b44a191b974c"),
                     Degree = "Bachelor's degree",
                     FieldOfStudy = "Software engineering",
                     School = "Sample university"
