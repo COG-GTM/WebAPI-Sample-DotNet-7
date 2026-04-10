@@ -24,11 +24,24 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Auto-apply pending EF Core migrations on startup
+// Auto-apply pending EF Core migrations on startup (with retry for Docker readiness)
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SampleDbContext>();
-    db.Database.Migrate();
+    var retries = 10;
+    for (var i = 0; i < retries; i++)
+    {
+        try
+        {
+            db.Database.Migrate();
+            break;
+        }
+        catch (Exception ex) when (i < retries - 1)
+        {
+            app.Logger.LogWarning(ex, "Database not ready, retrying in {Seconds}s ({Attempt}/{MaxRetries})...", i + 1, i + 1, retries);
+            Thread.Sleep(TimeSpan.FromSeconds(i + 1));
+        }
+    }
 }
 
 // Configure the HTTP request pipeline.

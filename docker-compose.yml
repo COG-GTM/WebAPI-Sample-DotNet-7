@@ -4,7 +4,9 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - postgres_db
+      postgres_db:
+        condition: service_healthy
+    restart: on-failure
     build:
       context: .
       dockerfile: Dockerfile
@@ -28,6 +30,11 @@ services:
     networks:
       - dev_network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sara"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   
   pgadmin:
     container_name: pgadmin_container
