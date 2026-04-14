@@ -4,7 +4,7 @@
 
 ### Purpose
 
-This specification document outlines the design and implementation plan for adding a GraphQL API to the existing ASP.NET Core Web API (.NET 7) sample project. The GraphQL API will provide an alternative interface to the same underlying data and business logic that the REST API currently uses, with both APIs coexisting and sharing the same PostgreSQL database.
+This specification document outlines the design and implementation plan for adding a GraphQL API to the existing ASP.NET Core Web API (.NET 10) sample project. The GraphQL API will provide an alternative interface to the same underlying data and business logic that the REST API currently uses, with both APIs coexisting and sharing the same PostgreSQL database.
 
 ### Current Architecture
 
@@ -48,18 +48,18 @@ The current API manages Education records with the following fields:
 
 ### GraphQL Framework
 
-**HotChocolate** (v13.x) will be used as the GraphQL server implementation for ASP.NET Core. HotChocolate is the most popular and feature-rich GraphQL server for .NET with excellent performance and comprehensive tooling.
+**HotChocolate** (v14.x+) will be used as the GraphQL server implementation for ASP.NET Core. HotChocolate is the most popular and feature-rich GraphQL server for .NET with excellent performance and comprehensive tooling.
 
 #### Required NuGet Packages
 
 ```xml
 <!-- Core HotChocolate packages -->
-<PackageReference Include="HotChocolate.AspNetCore" Version="13.9.0" />
-<PackageReference Include="HotChocolate.Data" Version="13.9.0" />
-<PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.9.0" />
+<PackageReference Include="HotChocolate.AspNetCore" Version="14.3.0" />
+<PackageReference Include="HotChocolate.Data" Version="14.3.0" />
+<PackageReference Include="HotChocolate.Data.EntityFramework" Version="14.3.0" />
 
 <!-- Optional: For authorization -->
-<PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="13.9.0" />
+<PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="14.3.0" />
 ```
 
 ### Integration Points with Existing Services
@@ -107,7 +107,7 @@ Update `src/WebApi/WebApi.csproj` to include HotChocolate packages:
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -122,9 +122,9 @@ Update `src/WebApi/WebApi.csproj` to include HotChocolate packages:
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     
     <!-- HotChocolate GraphQL packages -->
-    <PackageReference Include="HotChocolate.AspNetCore" Version="13.9.0" />
-    <PackageReference Include="HotChocolate.Data" Version="13.9.0" />
-    <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.9.0" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="14.3.0" />
+    <PackageReference Include="HotChocolate.Data" Version="14.3.0" />
+    <PackageReference Include="HotChocolate.Data.EntityFramework" Version="14.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -622,7 +622,7 @@ tests/
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
@@ -641,7 +641,7 @@ tests/
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="HotChocolate.Execution.Abstractions" Version="13.9.0" />
+    <PackageReference Include="HotChocolate.Execution.Abstractions" Version="14.3.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: ${{ vars.POSTGRES_USER || 'testuser' }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'testpass' }}
+          POSTGRES_DB: SampleDB
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U testuser -d SampleDB"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=SampleDB;Username=${{ vars.POSTGRES_USER || 'testuser' }};Password=${{ secrets.POSTGRES_PASSWORD || 'testpass' }};Pooling=true;"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          dotnet-quality: 'preview'
+
+      - name: Restore dependencies
+        run: dotnet restore Sample.sln
+
+      - name: Build
+        run: dotnet build Sample.sln --no-restore -c Release
+
+      - name: Test
+        run: dotnet test Sample.sln --no-build -c Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+      - name: Build Docker image
+        run: docker build -t webapi-sample .
