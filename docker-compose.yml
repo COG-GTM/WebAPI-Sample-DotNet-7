@@ -15,7 +15,7 @@ services:
       - dev_network
   postgres_db:
     container_name: postgres_container
-    image: postgres
+    image: postgres:17
     environment:
       POSTGRES_USER: sara
       POSTGRES_PASSWORD: mysecretpassword
