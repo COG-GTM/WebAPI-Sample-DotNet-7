@@ -18,7 +18,7 @@ namespace Infrastructure.DbContexts
             modelBuilder.Entity<Education>().HasData(
                 new Education
                 {
-                    Id = Guid.NewGuid(),
+                    Id = new Guid("c6492ba7-ec1e-4ebd-bd6e-25e64292cad6"),
                     Degree = "Bachelor's degree",
                     FieldOfStudy = "Software engineering",
                     School = "Sample university"
