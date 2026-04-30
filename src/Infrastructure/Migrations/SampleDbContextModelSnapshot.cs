@@ -17,7 +17,7 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "10.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -54,7 +54,7 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c92ea179-dd5c-46ca-b7b5-b44a191b974c"),
+                            Id = new Guid("c6492ba7-ec1e-4ebd-bd6e-25e64292cad6"),
                             Degree = "Bachelor's degree",
                             FieldOfStudy = "Software engineering",
                             School = "Sample university"
