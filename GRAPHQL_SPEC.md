@@ -113,13 +113,13 @@ Update `src/WebApi/WebApi.csproj` to include HotChocolate packages:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="7.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.16">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
     
     <!-- HotChocolate GraphQL packages -->
     <PackageReference Include="HotChocolate.AspNetCore" Version="13.9.0" />
@@ -630,14 +630,14 @@ tests/
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FakeItEasy" Version="7.4.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-    <PackageReference Include="xunit" Version="2.4.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+    <PackageReference Include="FakeItEasy" Version="8.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="3.2.0">
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
