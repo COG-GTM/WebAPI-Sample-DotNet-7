@@ -1,3 +1,10 @@
+dotnet=9.0.317
+  Determining projects to restore...
+  Restored /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/WebApi.Tests.csproj (in 953 ms).
+  Restored /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/WebApi/WebApi.csproj (in 953 ms).
+  4 of 6 projects are up-to-date for restore.
+
+RESTORE_EXIT=0
   Determining projects to restore...
   All projects are up-to-date for restore.
   Domain -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Domain/bin/Debug/net9.0/Domain.dll
@@ -11,6 +18,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:03.70
+Time Elapsed 00:00:03.84
 
 BUILD_EXIT=0
+BUILD_PIPELINE_EXIT=0

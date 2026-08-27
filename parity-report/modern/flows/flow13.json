@@ -1,0 +1,22 @@
+{
+  "body": {
+    "degree": "Master's degree",
+    "description": null,
+    "fieldOfStudy": "Computer science",
+    "id": "<CREATED_ID_F13>",
+    "school": "Parity university"
+  },
+  "flow": 13,
+  "name": "POST null Description -> 200",
+  "request": {
+    "body": {
+      "degree": "Master's degree",
+      "description": null,
+      "fieldOfStudy": "Computer science",
+      "school": "Parity university"
+    },
+    "method": "POST",
+    "path": "/api/educations"
+  },
+  "status": 200
+}

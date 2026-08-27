@@ -1,0 +1,11 @@
+{
+  "body": null,
+  "flow": 3,
+  "name": "GET unknown id -> 204",
+  "request": {
+    "body": null,
+    "method": "GET",
+    "path": "/api/educations/00000000-0000-0000-0000-000000000001"
+  },
+  "status": 204
+}

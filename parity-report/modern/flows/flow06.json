@@ -1,0 +1,11 @@
+{
+  "body": {},
+  "flow": 6,
+  "name": "POST null body -> 400",
+  "request": {
+    "body": null,
+    "method": "POST",
+    "path": "/api/educations"
+  },
+  "status": 400
+}
