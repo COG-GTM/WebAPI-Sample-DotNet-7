@@ -1,0 +1,16 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Domain -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Domain/bin/Debug/net9.0/Domain.dll
+  Application -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Application/bin/Debug/net9.0/Application.dll
+  Infrastructure -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Infrastructure/bin/Debug/net9.0/Infrastructure.dll
+  Application.Tests -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/Application.Tests/bin/Debug/net9.0/Application.Tests.dll
+  WebApi -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/WebApi/bin/Debug/net9.0/WebApi.dll
+  WebApi.Tests -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.70
+
+BUILD_EXIT=0
