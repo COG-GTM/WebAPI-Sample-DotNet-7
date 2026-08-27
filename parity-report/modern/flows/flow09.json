@@ -1,0 +1,28 @@
+{
+  "body": {
+    "errors": {
+      "$": [
+        "JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties including: 'school'."
+      ],
+      "model": [
+        "The model field is required."
+      ]
+    },
+    "status": 400,
+    "title": "One or more validation errors occurred.",
+    "traceId": "<TRACE_ID>",
+    "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1"
+  },
+  "flow": 9,
+  "name": "POST missing school -> 400",
+  "request": {
+    "body": {
+      "degree": "Master's degree",
+      "description": "Golden snapshot flow",
+      "fieldOfStudy": "Computer science"
+    },
+    "method": "POST",
+    "path": "/api/educations"
+  },
+  "status": 400
+}

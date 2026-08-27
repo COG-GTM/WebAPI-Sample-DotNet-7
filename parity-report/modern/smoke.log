@@ -1,0 +1,4 @@
+boot_wait_ms: 1094
+first_get_status: 200
+first_get_curl_time_seconds: 1.085890
+first_get_body: [{"id":"c92ea179-dd5c-46ca-b7b5-b44a191b974c","degree":"Bachelor's degree","fieldOfStudy":"Software engineering","school":"Sample university","description":null}]

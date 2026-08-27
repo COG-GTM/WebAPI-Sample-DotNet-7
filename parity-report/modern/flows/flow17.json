@@ -1,0 +1,24 @@
+{
+  "body": {
+    "errors": {
+      "": [
+        "A non-empty request body is required."
+      ],
+      "model": [
+        "The model field is required."
+      ]
+    },
+    "status": 400,
+    "title": "One or more validation errors occurred.",
+    "traceId": "<TRACE_ID>",
+    "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1"
+  },
+  "flow": 17,
+  "name": "PUT null body -> 400",
+  "request": {
+    "body": null,
+    "method": "PUT",
+    "path": "/api/educations/c92ea179-dd5c-46ca-b7b5-b44a191b974c"
+  },
+  "status": 400
+}

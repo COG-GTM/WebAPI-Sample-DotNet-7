@@ -1,0 +1,22 @@
+{
+  "body": {
+    "status": 400,
+    "title": "Bad Request",
+    "traceId": "<TRACE_ID>",
+    "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+  },
+  "flow": 16,
+  "name": "PUT unknown id -> 400",
+  "request": {
+    "body": {
+      "degree": "Master's degree",
+      "description": "Golden snapshot flow",
+      "fieldOfStudy": "Computer science",
+      "id": "00000000-0000-0000-0000-000000000001",
+      "school": "Parity university"
+    },
+    "method": "PUT",
+    "path": "/api/educations/00000000-0000-0000-0000-000000000001"
+  },
+  "status": 400
+}

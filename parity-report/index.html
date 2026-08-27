@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>net7 → net9 Migration Parity Report</title>
+<style>
+body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;margin:0;background:#f6f8fa;color:#1f2328}
+.wrap{max-width:1100px;margin:0 auto;padding:24px}
+header{background:#0d1117;color:#e6edf3;padding:28px 24px;margin-bottom:8px}
+header h1{margin:0 0 6px;font-size:22px} header p{margin:4px 0;color:#9ea7b3;max-width:1050px}
+table{border-collapse:collapse;width:100%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+th,td{border:1px solid #d0d7de;padding:10px 12px;text-align:left;font-size:14px}
+th{background:#eaeef2}
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;margin-right:6px}
+.badge.pass{background:#dafbe1;color:#116329} .badge.fail{background:#ffebe9;color:#a40e26}
+details{background:#fff;border:1px solid #d0d7de;border-radius:6px;margin:8px 0;padding:8px 12px}
+summary{cursor:pointer;font-size:14px}
+.fnum{font-weight:700} .statuses{color:#57606a;font-size:12px;margin:0 8px}
+.cols{display:flex;gap:12px} .cols>div{flex:1;min-width:0}
+pre{background:#f6f8fa;border:1px solid #d0d7de;border-radius:6px;padding:10px;font-size:12px;overflow:auto;max-height:420px;white-space:pre-wrap}
+h2{margin-top:32px} .just{color:#57606a;font-size:13px}
+ul{background:#fff;border:1px solid #d0d7de;border-radius:6px;padding:14px 32px;font-size:14px}
+li{margin:6px 0}
+.overall{font-size:16px;margin:10px 0}
+</style></head><body>
+<header><div class="wrap" style="padding:0">
+<h1>WebAPI-Sample-DotNet-7 — .NET 7 → .NET 9 Migration Parity Report</h1>
+<p>Migration of the WebAPI-Sample solution from .NET 7 to .NET 9: all six projects retargeted to net9.0, NuGet packages upgraded to .NET 9-compatible stable versions (EF Core 9.0.19, Npgsql 9.x, Swashbuckle 9.0.6, Mapster 10, xunit 2.9.3, FakeItEasy 9), Docker images and GitHub Actions workflow updated to 9.0, and a Directory.Build.props added enabling .NET analysers with warnings-as-errors as the static-analyser gate. Legacy baselines (build, tests, smoke, 20 golden flows, swagger, EF DDL) were captured on net7 before any migration edit; all gates were re-run on net9 and diffed against those baselines.</p>
+<p class="overall">Overall: <span class="badge pass">ALL GATES GREEN</span></p>
+</div></header>
+<div class="wrap">
+<h2>Gate Summary</h2>
+<table><tr><th>Gate</th><th>Legacy (net7)</th><th>Modernized (net9)</th></tr><tr><td>Build</td><td><span class="badge pass">PASS</span> 3 warning(s), 0 error(s)</td><td><span class="badge pass">PASS</span> 0 warning(s), 0 error(s)</td></tr><tr><td>Unit tests</td><td><span class="badge pass">PASS</span> 20/20 passed, 0 failed</td><td><span class="badge pass">PASS</span> 20/20 passed, 0 failed</td></tr><tr><td>Static analyser</td><td><span class="badge pass">PASS</span> no analyser config (baseline; default output: 3 warning(s), 0 error(s))</td><td><span class="badge pass">PASS</span> NET analysers, AnalysisLevel=latest, warnings-as-errors: 0 warning(s), 0 error(s)</td></tr><tr><td>Smoke test</td><td><span class="badge pass">PASS</span> GET /api/educations -&gt; 200 in 1.051876s (boot 6109 ms)</td><td><span class="badge pass">PASS</span> GET /api/educations -&gt; 200 in 1.085890s (boot 1094 ms)</td></tr><tr><td>Golden snapshot diff</td><td><span class="badge pass">PASS</span> baseline captured (20 flows)</td><td><span class="badge pass">PASS</span> 10/20 exact match, 10 justified framework differences</td></tr><tr><td>EF SQL parity</td><td><span class="badge pass">PASS</span> schema.sql baseline captured</td><td><span class="badge pass">PASS</span> DIFFERS: DDL is semantically equivalent; EF9 omits explicit NULL and a blank line, while the migration history ProductVersion is emitted as 9.0.19 by the EF9 tool/runtime rather than the snapshot annotation 7.0.10.</td></tr></table>
+<h2>Fixes Applied During Migration</h2>
+<ul><li><b>Target frameworks:</b> All six csproj files retargeted net7.0 -&gt; net9.0 (WebApi, Application, Infrastructure, Domain, Application.Tests, WebApi.Tests).</li><li><b>NuGet packages:</b> EF Core + Design/SqlServer/Tools 7.0.10 -&gt; 9.0.19; Npgsql 7.0.4 -&gt; 9.0.5; Npgsql.EntityFrameworkCore.PostgreSQL(+NodaTime) 7.0.4 -&gt; 9.0.4; AspNetCore.HealthChecks.NpgSql 7.0.0 -&gt; 9.0.0; Microsoft.AspNetCore.OpenApi 7.0.9 -&gt; 9.0.19; Mapster 7.3.0 -&gt; 10.0.12; Microsoft.NET.Test.Sdk 17.5.0 -&gt; 18.9.0; xunit 2.4.2 -&gt; 2.9.3; xunit.runner.visualstudio 2.4.5 -&gt; 4.0.0; FakeItEasy 7.4.0 -&gt; 9.0.1; coverlet.collector 3.2.0 -&gt; 10.0.1.</li><li><b>Swashbuckle compatibility:</b> Swashbuckle.AspNetCore pinned to 9.0.6 instead of 10.x: version 10 pulls Microsoft.OpenApi 2.x which throws TypeLoadException at runtime alongside Microsoft.AspNetCore.OpenApi 9.0.x.</li><li><b>src/WebApi/Program.cs:</b> Connection string is now resolved once and null-guarded with an InvalidOperationException, fixing nullable warnings (CS8604) that became errors under the analyser gate.</li><li><b>src/Infrastructure/DbContexts/SampleDbContext.cs:</b> HasData seed changed from Guid.NewGuid() to the stable GUID already used by the committed migration; EF Core 9 rejects nondeterministic seed data with PendingModelChangesWarning.</li><li><b>tests/WebApi.Tests/EducationsControllerTests.cs:</b> Two null-literal arguments changed to null! so the null-body test cases compile under nullable warnings-as-errors; controller signatures and runtime behavior are unchanged (assertions untouched).</li><li><b>Static analyser gate:</b> New Directory.Build.props enables EnableNETAnalyzers, AnalysisLevel=latest, and TreatWarningsAsErrors solution-wide; the net9 build passes with 0 warnings / 0 errors (legacy net7 build had 3 warnings).</li><li><b>Dockerfile:</b> Base images bumped from mcr.microsoft.com/dotnet/aspnet:7.0 and sdk:7.0 to 9.0.</li><li><b>.github/workflows/dotnet.yml:</b> dotnet-version fixed from 6.0.x to 9.0.x; actions/checkout and actions/setup-dotnet bumped to v4.</li><li><b>Behavioral differences (justified):</b> 10 of 20 golden flows differ only in framework-generated error metadata inherent to .NET 9: ProblemDetails type URLs moved from RFC 7231 to RFC 9110 sections, and System.Text.Json reworded its missing-required-properties message. All HTTP status codes and response semantics are identical. Swagger output differs only in OpenAPI patch version, response description wording, explicit required[] for C# required members, and omission of default parameter style. EF DDL is semantically identical (EF9 omits redundant explicit NULL; migration-history ProductVersion reflects the EF9 tool).</li></ul>
+<h2>20 Example Flows (Golden Snapshot)</h2>
+
+<details class="flow ok">
+<summary><span class="fnum">Flow 01</span> GET all with seed row
+ <span class="statuses">200 / 200</span> <span class="badge pass">MATCH</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: [
+    {
+      &quot;degree&quot;: &quot;Bachelor&#x27;s degree&quot;,
+      &quot;description&quot;: null,
+      &quot;fieldOfStudy&quot;: &quot;Software engineering&quot;,
+      &quot;id&quot;: &quot;c92ea179-dd5c-46ca-b7b5-b44a191b974c&quot;,
+      &quot;school&quot;: &quot;Sample university&quot;
+    }
+  ],
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;GET&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: [
+    {
+      &quot;degree&quot;: &quot;Bachelor&#x27;s degree&quot;,
+      &quot;description&quot;: null,
+      &quot;fieldOfStudy&quot;: &quot;Software engineering&quot;,
+      &quot;id&quot;: &quot;c92ea179-dd5c-46ca-b7b5-b44a191b974c&quot;,
+      &quot;school&quot;: &quot;Sample university&quot;
+    }
+  ],
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;GET&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+</div>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 02</span> GET seeded id -&gt; 200
+ <span class="statuses">200 / 200</span> <span class="badge pass">MATCH</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;degree&quot;: &quot;Bachelor&#x27;s degree&quot;,
+    &quot;description&quot;: null,
+    &quot;fieldOfStudy&quot;: &quot;Software engineering&quot;,
+    &quot;id&quot;: &quot;c92ea179-dd5c-46ca-b7b5-b44a191b974c&quot;,
+    &quot;school&quot;: &quot;Sample university&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;GET&quot;,
+    &quot;path&quot;: &quot;/api/educations/c92ea179-dd5c-46ca-b7b5-b44a191b974c&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;degree&quot;: &quot;Bachelor&#x27;s degree&quot;,
+    &quot;description&quot;: null,
+    &quot;fieldOfStudy&quot;: &quot;Software engineering&quot;,
+    &quot;id&quot;: &quot;c92ea179-dd5c-46ca-b7b5-b44a191b974c&quot;,
+    &quot;school&quot;: &quot;Sample university&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;GET&quot;,
+    &quot;path&quot;: &quot;/api/educations/c92ea179-dd5c-46ca-b7b5-b44a191b974c&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+</div>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 03</span> GET unknown id -&gt; 204
+ <span class="statuses">204 / 204</span> <span class="badge pass">MATCH</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: null,
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;GET&quot;,
+    &quot;path&quot;: &quot;/api/educations/00000000-0000-0000-0000-000000000001&quot;
+  },
+  &quot;status&quot;: 204
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: null,
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;GET&quot;,
+    &quot;path&quot;: &quot;/api/educations/00000000-0000-0000-0000-000000000001&quot;
+  },
+  &quot;status&quot;: 204
+}</pre></div>
+</div>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 04</span> GET malformed guid -&gt; 404
+ <span class="statuses">404 / 404</span> <span class="badge pass">MATCH</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: null,
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;GET&quot;,
+    &quot;path&quot;: &quot;/api/educations/not-a-guid&quot;
+  },
+  &quot;status&quot;: 404
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: null,
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;GET&quot;,
+    &quot;path&quot;: &quot;/api/educations/not-a-guid&quot;
+  },
+  &quot;status&quot;: 404
+}</pre></div>
+</div>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 05</span> POST valid -&gt; 200 + dto
+ <span class="statuses">200 / 200</span> <span class="badge pass">MATCH</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+    &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+    &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+    &quot;id&quot;: &quot;&lt;CREATED_ID_F5&gt;&quot;,
+    &quot;school&quot;: &quot;Parity university&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+    &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+    &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+    &quot;id&quot;: &quot;&lt;CREATED_ID_F5&gt;&quot;,
+    &quot;school&quot;: &quot;Parity university&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+</div>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 06</span> POST null body -&gt; 400
+ <span class="statuses">400 / 400</span> <span class="badge pass">JUSTIFIED DIFF</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;errors&quot;: {
+      &quot;&quot;: [
+        &quot;A non-empty request body is required.&quot;
+      ],
+      &quot;model&quot;: [
+        &quot;The model field is required.&quot;
+      ]
+    },
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;One or more validation errors occurred.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc7231#section-6.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;errors&quot;: {
+      &quot;&quot;: [
+        &quot;A non-empty request body is required.&quot;
+      ],
+      &quot;model&quot;: [
+        &quot;The model field is required.&quot;
+      ]
+    },
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;One or more validation errors occurred.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc9110#section-15.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+</div><h4>Differences</h4><pre>body.type: &#x27;https://tools.ietf.org/html/rfc7231#section-6.5.1&#x27; != &#x27;https://tools.ietf.org/html/rfc9110#section-15.5.1&#x27;</pre><p class="just">Justification: .NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231</p>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 07</span> POST missing degree -&gt; 400
+ <span class="statuses">400 / 400</span> <span class="badge pass">JUSTIFIED DIFF</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;errors&quot;: {
+      &quot;$&quot;: [
+        &quot;JSON deserialization for type &#x27;Application.Dtos.EducationDto&#x27; was missing required properties, including the following: degree&quot;
+      ],
+      &quot;model&quot;: [
+        &quot;The model field is required.&quot;
+      ]
+    },
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;One or more validation errors occurred.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc7231#section-6.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;errors&quot;: {
+      &quot;$&quot;: [
+        &quot;JSON deserialization for type &#x27;Application.Dtos.EducationDto&#x27; was missing required properties including: &#x27;degree&#x27;.&quot;
+      ],
+      &quot;model&quot;: [
+        &quot;The model field is required.&quot;
+      ]
+    },
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;One or more validation errors occurred.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc9110#section-15.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+</div><h4>Differences</h4><pre>body.errors.$[0]: &quot;JSON deserialization for type &#x27;Application.Dtos.EducationDto&#x27; was missing required properties, including the following: degree&quot; != &quot;JSON deserialization for type &#x27;Application.Dtos.EducationDto&#x27; was missing required properties including: &#x27;degree&#x27;.&quot;
+body.type: &#x27;https://tools.ietf.org/html/rfc7231#section-6.5.1&#x27; != &#x27;https://tools.ietf.org/html/rfc9110#section-15.5.1&#x27;</pre><p class="just">Justification: System.Text.Json reworded the missing-required-properties message in .NET 9; .NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231</p>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 08</span> POST missing fieldOfStudy -&gt; 400
+ <span class="statuses">400 / 400</span> <span class="badge pass">JUSTIFIED DIFF</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;errors&quot;: {
+      &quot;$&quot;: [
+        &quot;JSON deserialization for type &#x27;Application.Dtos.EducationDto&#x27; was missing required properties, including the following: fieldOfStudy&quot;
+      ],
+      &quot;model&quot;: [
+        &quot;The model field is required.&quot;
+      ]
+    },
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;One or more validation errors occurred.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc7231#section-6.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;errors&quot;: {
+      &quot;$&quot;: [
+        &quot;JSON deserialization for type &#x27;Application.Dtos.EducationDto&#x27; was missing required properties including: &#x27;fieldOfStudy&#x27;.&quot;
+      ],
+      &quot;model&quot;: [
+        &quot;The model field is required.&quot;
+      ]
+    },
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;One or more validation errors occurred.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc9110#section-15.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+</div><h4>Differences</h4><pre>body.errors.$[0]: &quot;JSON deserialization for type &#x27;Application.Dtos.EducationDto&#x27; was missing required properties, including the following: fieldOfStudy&quot; != &quot;JSON deserialization for type &#x27;Application.Dtos.EducationDto&#x27; was missing required properties including: &#x27;fieldOfStudy&#x27;.&quot;
+body.type: &#x27;https://tools.ietf.org/html/rfc7231#section-6.5.1&#x27; != &#x27;https://tools.ietf.org/html/rfc9110#section-15.5.1&#x27;</pre><p class="just">Justification: System.Text.Json reworded the missing-required-properties message in .NET 9; .NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231</p>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 09</span> POST missing school -&gt; 400
+ <span class="statuses">400 / 400</span> <span class="badge pass">JUSTIFIED DIFF</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;errors&quot;: {
+      &quot;$&quot;: [
+        &quot;JSON deserialization for type &#x27;Application.Dtos.EducationDto&#x27; was missing required properties, including the following: school&quot;
+      ],
+      &quot;model&quot;: [
+        &quot;The model field is required.&quot;
+      ]
+    },
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;One or more validation errors occurred.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc7231#section-6.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;errors&quot;: {
+      &quot;$&quot;: [
+        &quot;JSON deserialization for type &#x27;Application.Dtos.EducationDto&#x27; was missing required properties including: &#x27;school&#x27;.&quot;
+      ],
+      &quot;model&quot;: [
+        &quot;The model field is required.&quot;
+      ]
+    },
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;One or more validation errors occurred.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc9110#section-15.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+</div><h4>Differences</h4><pre>body.errors.$[0]: &quot;JSON deserialization for type &#x27;Application.Dtos.EducationDto&#x27; was missing required properties, including the following: school&quot; != &quot;JSON deserialization for type &#x27;Application.Dtos.EducationDto&#x27; was missing required properties including: &#x27;school&#x27;.&quot;
+body.type: &#x27;https://tools.ietf.org/html/rfc7231#section-6.5.1&#x27; != &#x27;https://tools.ietf.org/html/rfc9110#section-15.5.1&#x27;</pre><p class="just">Justification: System.Text.Json reworded the missing-required-properties message in .NET 9; .NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231</p>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 10</span> POST Degree &gt; 50 chars
+ <span class="statuses">500 / 500</span> <span class="badge pass">JUSTIFIED DIFF</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;status&quot;: 500,
+    &quot;title&quot;: &quot;An error occurred while processing your request.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc7231#section-6.6.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 500
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;status&quot;: 500,
+    &quot;title&quot;: &quot;An error occurred while processing your request.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc9110#section-15.6.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 500
+}</pre></div>
+</div><h4>Differences</h4><pre>body.type: &#x27;https://tools.ietf.org/html/rfc7231#section-6.6.1&#x27; != &#x27;https://tools.ietf.org/html/rfc9110#section-15.6.1&#x27;</pre><p class="just">Justification: .NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231</p>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 11</span> POST FieldOfStudy/School &gt; 250 chars
+ <span class="statuses">500 / 500</span> <span class="badge pass">JUSTIFIED DIFF</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;status&quot;: 500,
+    &quot;title&quot;: &quot;An error occurred while processing your request.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc7231#section-6.6.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF&quot;,
+      &quot;school&quot;: &quot;SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 500
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;status&quot;: 500,
+    &quot;title&quot;: &quot;An error occurred while processing your request.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc9110#section-15.6.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF&quot;,
+      &quot;school&quot;: &quot;SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 500
+}</pre></div>
+</div><h4>Differences</h4><pre>body.type: &#x27;https://tools.ietf.org/html/rfc7231#section-6.6.1&#x27; != &#x27;https://tools.ietf.org/html/rfc9110#section-15.6.1&#x27;</pre><p class="just">Justification: .NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231</p>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 12</span> POST Description &gt; 1000 chars
+ <span class="statuses">500 / 500</span> <span class="badge pass">JUSTIFIED DIFF</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;status&quot;: 500,
+    &quot;title&quot;: &quot;An error occurred while processing your request.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc7231#section-6.6.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: &quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 500
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;status&quot;: 500,
+    &quot;title&quot;: &quot;An error occurred while processing your request.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc9110#section-15.6.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: &quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 500
+}</pre></div>
+</div><h4>Differences</h4><pre>body.type: &#x27;https://tools.ietf.org/html/rfc7231#section-6.6.1&#x27; != &#x27;https://tools.ietf.org/html/rfc9110#section-15.6.1&#x27;</pre><p class="just">Justification: .NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231</p>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 13</span> POST null Description -&gt; 200
+ <span class="statuses">200 / 200</span> <span class="badge pass">MATCH</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+    &quot;description&quot;: null,
+    &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+    &quot;id&quot;: &quot;&lt;CREATED_ID_F13&gt;&quot;,
+    &quot;school&quot;: &quot;Parity university&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: null,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+    &quot;description&quot;: null,
+    &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+    &quot;id&quot;: &quot;&lt;CREATED_ID_F13&gt;&quot;,
+    &quot;school&quot;: &quot;Parity university&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: null,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;path&quot;: &quot;/api/educations&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+</div>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 14</span> GET after create matches
+ <span class="statuses">200 / 200</span> <span class="badge pass">MATCH</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+    &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+    &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+    &quot;id&quot;: &quot;&lt;CREATED_ID_F5&gt;&quot;,
+    &quot;school&quot;: &quot;Parity university&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;GET&quot;,
+    &quot;path&quot;: &quot;/api/educations/&lt;CREATED_ID_F5&gt;&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+    &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+    &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+    &quot;id&quot;: &quot;&lt;CREATED_ID_F5&gt;&quot;,
+    &quot;school&quot;: &quot;Parity university&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;GET&quot;,
+    &quot;path&quot;: &quot;/api/educations/&lt;CREATED_ID_F5&gt;&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+</div>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 15</span> PUT valid -&gt; 200; GET reflects change
+ <span class="statuses">200 / 200</span> <span class="badge pass">MATCH</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;get_after_put&quot;: {
+      &quot;degree&quot;: &quot;PhD&quot;,
+      &quot;description&quot;: &quot;Updated by flow 15&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;id&quot;: &quot;&lt;CREATED_ID_F5&gt;&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;get_after_put_status&quot;: 200,
+    &quot;put_response&quot;: null
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;PhD&quot;,
+      &quot;description&quot;: &quot;Updated by flow 15&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;id&quot;: &quot;&lt;CREATED_ID_F5&gt;&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;PUT&quot;,
+    &quot;path&quot;: &quot;/api/educations/&lt;CREATED_ID_F5&gt;&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;get_after_put&quot;: {
+      &quot;degree&quot;: &quot;PhD&quot;,
+      &quot;description&quot;: &quot;Updated by flow 15&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;id&quot;: &quot;&lt;CREATED_ID_F5&gt;&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;get_after_put_status&quot;: 200,
+    &quot;put_response&quot;: null
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;PhD&quot;,
+      &quot;description&quot;: &quot;Updated by flow 15&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;id&quot;: &quot;&lt;CREATED_ID_F5&gt;&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;PUT&quot;,
+    &quot;path&quot;: &quot;/api/educations/&lt;CREATED_ID_F5&gt;&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+</div>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 16</span> PUT unknown id -&gt; 400
+ <span class="statuses">400 / 400</span> <span class="badge pass">JUSTIFIED DIFF</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;Bad Request&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc7231#section-6.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;id&quot;: &quot;00000000-0000-0000-0000-000000000001&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;PUT&quot;,
+    &quot;path&quot;: &quot;/api/educations/00000000-0000-0000-0000-000000000001&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;Bad Request&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc9110#section-15.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Master&#x27;s degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;id&quot;: &quot;00000000-0000-0000-0000-000000000001&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;PUT&quot;,
+    &quot;path&quot;: &quot;/api/educations/00000000-0000-0000-0000-000000000001&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+</div><h4>Differences</h4><pre>body.type: &#x27;https://tools.ietf.org/html/rfc7231#section-6.5.1&#x27; != &#x27;https://tools.ietf.org/html/rfc9110#section-15.5.1&#x27;</pre><p class="just">Justification: .NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231</p>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 17</span> PUT null body -&gt; 400
+ <span class="statuses">400 / 400</span> <span class="badge pass">JUSTIFIED DIFF</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;errors&quot;: {
+      &quot;&quot;: [
+        &quot;A non-empty request body is required.&quot;
+      ],
+      &quot;model&quot;: [
+        &quot;The model field is required.&quot;
+      ]
+    },
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;One or more validation errors occurred.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc7231#section-6.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;PUT&quot;,
+    &quot;path&quot;: &quot;/api/educations/c92ea179-dd5c-46ca-b7b5-b44a191b974c&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;errors&quot;: {
+      &quot;&quot;: [
+        &quot;A non-empty request body is required.&quot;
+      ],
+      &quot;model&quot;: [
+        &quot;The model field is required.&quot;
+      ]
+    },
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;One or more validation errors occurred.&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc9110#section-15.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;PUT&quot;,
+    &quot;path&quot;: &quot;/api/educations/c92ea179-dd5c-46ca-b7b5-b44a191b974c&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+</div><h4>Differences</h4><pre>body.type: &#x27;https://tools.ietf.org/html/rfc7231#section-6.5.1&#x27; != &#x27;https://tools.ietf.org/html/rfc9110#section-15.5.1&#x27;</pre><p class="just">Justification: .NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231</p>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 18</span> DELETE valid -&gt; 200; GET -&gt; 204
+ <span class="statuses">200 / 200</span> <span class="badge pass">MATCH</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;delete_response&quot;: null,
+    &quot;get_after_delete&quot;: null,
+    &quot;get_after_delete_status&quot;: 204
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;DELETE&quot;,
+    &quot;path&quot;: &quot;/api/educations/&lt;CREATED_ID_F5&gt;&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;delete_response&quot;: null,
+    &quot;get_after_delete&quot;: null,
+    &quot;get_after_delete_status&quot;: 204
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;DELETE&quot;,
+    &quot;path&quot;: &quot;/api/educations/&lt;CREATED_ID_F5&gt;&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+</div>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 19</span> DELETE unknown id -&gt; 400
+ <span class="statuses">400 / 400</span> <span class="badge pass">JUSTIFIED DIFF</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;Bad Request&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc7231#section-6.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;DELETE&quot;,
+    &quot;path&quot;: &quot;/api/educations/00000000-0000-0000-0000-000000000001&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;status&quot;: 400,
+    &quot;title&quot;: &quot;Bad Request&quot;,
+    &quot;traceId&quot;: &quot;&lt;TRACE_ID&gt;&quot;,
+    &quot;type&quot;: &quot;https://tools.ietf.org/html/rfc9110#section-15.5.1&quot;
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: null,
+    &quot;method&quot;: &quot;DELETE&quot;,
+    &quot;path&quot;: &quot;/api/educations/00000000-0000-0000-0000-000000000001&quot;
+  },
+  &quot;status&quot;: 400
+}</pre></div>
+</div><h4>Differences</h4><pre>body.type: &#x27;https://tools.ietf.org/html/rfc7231#section-6.5.1&#x27; != &#x27;https://tools.ietf.org/html/rfc9110#section-15.5.1&#x27;</pre><p class="just">Justification: .NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231</p>
+</details>
+<details class="flow ok">
+<summary><span class="fnum">Flow 20</span> create -&gt; update -&gt; delete lifecycle
+ <span class="statuses">200 / 200</span> <span class="badge pass">MATCH</span></summary>
+<div class="cols">
+<div><h4>Legacy (net7)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;create&quot;: {
+      &quot;degree&quot;: &quot;Lifecycle degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;id&quot;: &quot;&lt;CREATED_ID_F20&gt;&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;create_status&quot;: 200,
+    &quot;delete&quot;: null,
+    &quot;delete_status&quot;: 200,
+    &quot;get_after_delete&quot;: null,
+    &quot;get_after_delete_status&quot;: 204,
+    &quot;update&quot;: null,
+    &quot;update_status&quot;: 200
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Lifecycle degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;MULTI&quot;,
+    &quot;path&quot;: &quot;/api/educations/&lt;CREATED_ID_F20&gt;&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+<div><h4>Modernized (net9)</h4><pre>{
+  &quot;body&quot;: {
+    &quot;create&quot;: {
+      &quot;degree&quot;: &quot;Lifecycle degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;id&quot;: &quot;&lt;CREATED_ID_F20&gt;&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;create_status&quot;: 200,
+    &quot;delete&quot;: null,
+    &quot;delete_status&quot;: 200,
+    &quot;get_after_delete&quot;: null,
+    &quot;get_after_delete_status&quot;: 204,
+    &quot;update&quot;: null,
+    &quot;update_status&quot;: 200
+  },
+  &quot;request&quot;: {
+    &quot;body&quot;: {
+      &quot;degree&quot;: &quot;Lifecycle degree&quot;,
+      &quot;description&quot;: &quot;Golden snapshot flow&quot;,
+      &quot;fieldOfStudy&quot;: &quot;Computer science&quot;,
+      &quot;school&quot;: &quot;Parity university&quot;
+    },
+    &quot;method&quot;: &quot;MULTI&quot;,
+    &quot;path&quot;: &quot;/api/educations/&lt;CREATED_ID_F20&gt;&quot;
+  },
+  &quot;status&quot;: 200
+}</pre></div>
+</div>
+</details>
+<h2>OpenAPI Comparison</h2>
+<details><summary>OpenAPI (swagger.json) comparison <span class="badge pass">JUSTIFIED</span></summary><pre>swagger.components.schemas.EducationDto.required: only in modern ([&#x27;degree&#x27;, &#x27;fieldOfStudy&#x27;, &#x27;school&#x27;])
+swagger.openapi: &#x27;3.0.1&#x27; != &#x27;3.0.4&#x27;
+swagger.paths./api/Educations.get.responses.200.description: &#x27;Success&#x27; != &#x27;OK&#x27;
+swagger.paths./api/Educations.post.responses.200.description: &#x27;Success&#x27; != &#x27;OK&#x27;
+swagger.paths./api/Educations/{id}.delete.parameters[0].style: only in legacy (&#x27;simple&#x27;)
+swagger.paths./api/Educations/{id}.delete.responses.200.description: &#x27;Success&#x27; != &#x27;OK&#x27;
+swagger.paths./api/Educations/{id}.get.parameters[0].style: only in legacy (&#x27;simple&#x27;)
+swagger.paths./api/Educations/{id}.get.responses.200.description: &#x27;Success&#x27; != &#x27;OK&#x27;
+swagger.paths./api/Educations/{id}.put.parameters[0].style: only in legacy (&#x27;simple&#x27;)
+swagger.paths./api/Educations/{id}.put.responses.200.description: &#x27;Success&#x27; != &#x27;OK&#x27;</pre><p class="just">Justification: Inherent .NET 9 / Swashbuckle 9 output changes: OpenAPI patch version 3.0.1-&gt;3.0.4, response descriptions &#x27;Success&#x27;-&gt;&#x27;OK&#x27;, explicit required[] emitted for C# `required` DTO members, and default parameter style &#x27;simple&#x27; no longer serialized. Endpoints, schemas, and semantics are unchanged.</p></details>
+<h2>EF Migration SQL Parity</h2>
+<pre>--- parity-report/legacy/schema.sql
++++ parity-report/modern/schema.sql
+@@ -5,13 +5,12 @@
+ );
+ 
+ START TRANSACTION;
+-
+ CREATE TABLE &quot;Educations&quot; (
+     &quot;Id&quot; uuid NOT NULL,
+     &quot;Degree&quot; character varying(50) NOT NULL,
+     &quot;FieldOfStudy&quot; character varying(250) NOT NULL,
+     &quot;School&quot; character varying(250) NOT NULL,
+-    &quot;Description&quot; character varying(1000) NULL,
++    &quot;Description&quot; character varying(1000),
+     CONSTRAINT &quot;PK_Educations&quot; PRIMARY KEY (&quot;Id&quot;)
+ );
+ 
+@@ -19,7 +18,7 @@
+ VALUES (&#x27;c92ea179-dd5c-46ca-b7b5-b44a191b974c&#x27;, &#x27;Bachelor&#x27;&#x27;s degree&#x27;, NULL, &#x27;Software engineering&#x27;, &#x27;Sample university&#x27;);
+ 
+ INSERT INTO &quot;__EFMigrationsHistory&quot; (&quot;MigrationId&quot;, &quot;ProductVersion&quot;)
+-VALUES (&#x27;20240113141226_Initialize&#x27;, &#x27;7.0.10&#x27;);
++VALUES (&#x27;20240113141226_Initialize&#x27;, &#x27;9.0.19&#x27;);
+ 
+ COMMIT;
+ 
+DIFFERS: DDL is semantically equivalent; EF9 omits explicit NULL and a blank line, while the migration history ProductVersion is emitted as 9.0.19 by the EF9 tool/runtime rather than the snapshot annotation 7.0.10.
+</pre>
+</div></body></html>

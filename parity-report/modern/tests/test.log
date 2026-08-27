@@ -1,0 +1,26 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Domain -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Domain/bin/Debug/net9.0/Domain.dll
+  Application -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Application/bin/Debug/net9.0/Application.dll
+  Infrastructure -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Infrastructure/bin/Debug/net9.0/Infrastructure.dll
+  Application.Tests -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/Application.Tests/bin/Debug/net9.0/Application.Tests.dll
+Test run for /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/Application.Tests/bin/Debug/net9.0/Application.Tests.dll (.NETCoreApp,Version=v9.0)
+VSTest version 17.14.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+  WebApi -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/WebApi/bin/Debug/net9.0/WebApi.dll
+  WebApi.Tests -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll
+Test run for /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll (.NETCoreApp,Version=v9.0)
+VSTest version 17.14.1 (x64)
+
+Starting test execution, please wait...
+Results File: /home/ubuntu/repos/WebAPI-Sample-DotNet-7/parity-report/modern/tests/_devin-box_2026-08-27_13_42_34.trx
+
+Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 209 ms - Application.Tests.dll (net9.0)
+A total of 1 test files matched the specified pattern.
+Results File: /home/ubuntu/repos/WebAPI-Sample-DotNet-7/parity-report/modern/tests/_devin-box_2026-08-27_13_42_35.trx
+
+Passed!  - Failed:     0, Passed:    14, Skipped:     0, Total:    14, Duration: 133 ms - WebApi.Tests.dll (net9.0)
+
+TEST_EXIT=0

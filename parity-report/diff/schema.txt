@@ -1,0 +1,27 @@
+--- parity-report/legacy/schema.sql
++++ parity-report/modern/schema.sql
+@@ -5,13 +5,12 @@
+ );
+ 
+ START TRANSACTION;
+-
+ CREATE TABLE "Educations" (
+     "Id" uuid NOT NULL,
+     "Degree" character varying(50) NOT NULL,
+     "FieldOfStudy" character varying(250) NOT NULL,
+     "School" character varying(250) NOT NULL,
+-    "Description" character varying(1000) NULL,
++    "Description" character varying(1000),
+     CONSTRAINT "PK_Educations" PRIMARY KEY ("Id")
+ );
+ 
+@@ -19,7 +18,7 @@
+ VALUES ('c92ea179-dd5c-46ca-b7b5-b44a191b974c', 'Bachelor''s degree', NULL, 'Software engineering', 'Sample university');
+ 
+ INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+-VALUES ('20240113141226_Initialize', '7.0.10');
++VALUES ('20240113141226_Initialize', '9.0.19');
+ 
+ COMMIT;
+ 
+DIFFERS: DDL is semantically equivalent; EF9 omits explicit NULL and a blank line, while the migration history ProductVersion is emitted as 9.0.19 by the EF9 tool/runtime rather than the snapshot annotation 7.0.10.

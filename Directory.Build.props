@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <!-- Enforce the latest .NET static-analyser rules as build gates. -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

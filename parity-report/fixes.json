@@ -1,0 +1,45 @@
+{
+  "summary": "Migration of the WebAPI-Sample solution from .NET 7 to .NET 9: all six projects retargeted to net9.0, NuGet packages upgraded to .NET 9-compatible stable versions (EF Core 9.0.19, Npgsql 9.x, Swashbuckle 9.0.6, Mapster 10, xunit 2.9.3, FakeItEasy 9), Docker images and GitHub Actions workflow updated to 9.0, and a Directory.Build.props added enabling .NET analysers with warnings-as-errors as the static-analyser gate. Legacy baselines (build, tests, smoke, 20 golden flows, swagger, EF DDL) were captured on net7 before any migration edit; all gates were re-run on net9 and diffed against those baselines.",
+  "fixes": [
+    {
+      "area": "Target frameworks",
+      "description": "All six csproj files retargeted net7.0 -> net9.0 (WebApi, Application, Infrastructure, Domain, Application.Tests, WebApi.Tests)."
+    },
+    {
+      "area": "NuGet packages",
+      "description": "EF Core + Design/SqlServer/Tools 7.0.10 -> 9.0.19; Npgsql 7.0.4 -> 9.0.5; Npgsql.EntityFrameworkCore.PostgreSQL(+NodaTime) 7.0.4 -> 9.0.4; AspNetCore.HealthChecks.NpgSql 7.0.0 -> 9.0.0; Microsoft.AspNetCore.OpenApi 7.0.9 -> 9.0.19; Mapster 7.3.0 -> 10.0.12; Microsoft.NET.Test.Sdk 17.5.0 -> 18.9.0; xunit 2.4.2 -> 2.9.3; xunit.runner.visualstudio 2.4.5 -> 4.0.0; FakeItEasy 7.4.0 -> 9.0.1; coverlet.collector 3.2.0 -> 10.0.1."
+    },
+    {
+      "area": "Swashbuckle compatibility",
+      "description": "Swashbuckle.AspNetCore pinned to 9.0.6 instead of 10.x: version 10 pulls Microsoft.OpenApi 2.x which throws TypeLoadException at runtime alongside Microsoft.AspNetCore.OpenApi 9.0.x."
+    },
+    {
+      "area": "src/WebApi/Program.cs",
+      "description": "Connection string is now resolved once and null-guarded with an InvalidOperationException, fixing nullable warnings (CS8604) that became errors under the analyser gate."
+    },
+    {
+      "area": "src/Infrastructure/DbContexts/SampleDbContext.cs",
+      "description": "HasData seed changed from Guid.NewGuid() to the stable GUID already used by the committed migration; EF Core 9 rejects nondeterministic seed data with PendingModelChangesWarning."
+    },
+    {
+      "area": "tests/WebApi.Tests/EducationsControllerTests.cs",
+      "description": "Two null-literal arguments changed to null! so the null-body test cases compile under nullable warnings-as-errors; controller signatures and runtime behavior are unchanged (assertions untouched)."
+    },
+    {
+      "area": "Static analyser gate",
+      "description": "New Directory.Build.props enables EnableNETAnalyzers, AnalysisLevel=latest, and TreatWarningsAsErrors solution-wide; the net9 build passes with 0 warnings / 0 errors (legacy net7 build had 3 warnings)."
+    },
+    {
+      "area": "Dockerfile",
+      "description": "Base images bumped from mcr.microsoft.com/dotnet/aspnet:7.0 and sdk:7.0 to 9.0."
+    },
+    {
+      "area": ".github/workflows/dotnet.yml",
+      "description": "dotnet-version fixed from 6.0.x to 9.0.x; actions/checkout and actions/setup-dotnet bumped to v4."
+    },
+    {
+      "area": "Behavioral differences (justified)",
+      "description": "10 of 20 golden flows differ only in framework-generated error metadata inherent to .NET 9: ProblemDetails type URLs moved from RFC 7231 to RFC 9110 sections, and System.Text.Json reworded its missing-required-properties message. All HTTP status codes and response semantics are identical. Swagger output differs only in OpenAPI patch version, response description wording, explicit required[] for C# required members, and omission of default parameter style. EF DDL is semantically identical (EF9 omits redundant explicit NULL; migration-history ProductVersion reflects the EF9 tool)."
+    }
+  ]
+}

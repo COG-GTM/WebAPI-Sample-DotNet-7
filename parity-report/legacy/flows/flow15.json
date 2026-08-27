@@ -1,0 +1,27 @@
+{
+  "body": {
+    "get_after_put": {
+      "degree": "PhD",
+      "description": "Updated by flow 15",
+      "fieldOfStudy": "Computer science",
+      "id": "<CREATED_ID_F5>",
+      "school": "Parity university"
+    },
+    "get_after_put_status": 200,
+    "put_response": null
+  },
+  "flow": 15,
+  "name": "PUT valid -> 200; GET reflects change",
+  "request": {
+    "body": {
+      "degree": "PhD",
+      "description": "Updated by flow 15",
+      "fieldOfStudy": "Computer science",
+      "id": "<CREATED_ID_F5>",
+      "school": "Parity university"
+    },
+    "method": "PUT",
+    "path": "/api/educations/<CREATED_ID_F5>"
+  },
+  "status": 200
+}

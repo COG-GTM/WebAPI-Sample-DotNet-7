@@ -1,0 +1,26 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Domain -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Domain/bin/Debug/net7.0/Domain.dll
+  Application -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Application/bin/Debug/net7.0/Application.dll
+  Infrastructure -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Infrastructure/bin/Debug/net7.0/Infrastructure.dll
+  Application.Tests -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/Application.Tests/bin/Debug/net7.0/Application.Tests.dll
+Test run for /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/Application.Tests/bin/Debug/net7.0/Application.Tests.dll (.NETCoreApp,Version=v7.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.7.2 (x64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+  WebApi -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/WebApi/bin/Debug/net7.0/WebApi.dll
+  WebApi.Tests -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net7.0/WebApi.Tests.dll
+Test run for /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net7.0/WebApi.Tests.dll (.NETCoreApp,Version=v7.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.7.2 (x64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+Results File: /home/ubuntu/repos/WebAPI-Sample-DotNet-7/parity-report/legacy/tests/_devin-box_2026-08-27_13_28_39.trx
+
+Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 42 ms - Application.Tests.dll (net7.0)
+Results File: /home/ubuntu/repos/WebAPI-Sample-DotNet-7/parity-report/legacy/tests/_devin-box_2026-08-27_13_28_40.trx
+
+Passed!  - Failed:     0, Passed:    14, Skipped:     0, Total:    14, Duration: 74 ms - WebApi.Tests.dll (net7.0)

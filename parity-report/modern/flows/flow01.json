@@ -1,0 +1,19 @@
+{
+  "body": [
+    {
+      "degree": "Bachelor's degree",
+      "description": null,
+      "fieldOfStudy": "Software engineering",
+      "id": "c92ea179-dd5c-46ca-b7b5-b44a191b974c",
+      "school": "Sample university"
+    }
+  ],
+  "flow": 1,
+  "name": "GET all with seed row",
+  "request": {
+    "body": null,
+    "method": "GET",
+    "path": "/api/educations"
+  },
+  "status": 200
+}

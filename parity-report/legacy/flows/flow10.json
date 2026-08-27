@@ -1,0 +1,21 @@
+{
+  "body": {
+    "status": 500,
+    "title": "An error occurred while processing your request.",
+    "traceId": "<TRACE_ID>",
+    "type": "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+  },
+  "flow": 10,
+  "name": "POST Degree > 50 chars",
+  "request": {
+    "body": {
+      "degree": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+      "description": "Golden snapshot flow",
+      "fieldOfStudy": "Computer science",
+      "school": "Parity university"
+    },
+    "method": "POST",
+    "path": "/api/educations"
+  },
+  "status": 500
+}
