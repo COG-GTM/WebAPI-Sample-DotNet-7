@@ -1,7 +1,6 @@
 {
-  "all_flows_match": false,
+  "all_flows_match": true,
   "swagger": {
-    "verdict": "mismatch",
     "diffs": [
       "swagger.components.schemas.EducationDto.required: only in modern (['degree', 'fieldOfStudy', 'school'])",
       "swagger.openapi: '3.0.1' != '3.0.4'",
@@ -13,7 +12,9 @@
       "swagger.paths./api/Educations/{id}.get.responses.200.description: 'Success' != 'OK'",
       "swagger.paths./api/Educations/{id}.put.parameters[0].style: only in legacy ('simple')",
       "swagger.paths./api/Educations/{id}.put.responses.200.description: 'Success' != 'OK'"
-    ]
+    ],
+    "verdict": "justified",
+    "justification": "Inherent .NET 9 / Swashbuckle 9 output changes: OpenAPI patch version 3.0.1->3.0.4, response descriptions 'Success'->'OK', explicit required[] emitted for C# `required` DTO members, and default parameter style 'simple' no longer serialized. Endpoints, schemas, and semantics are unchanged."
   },
   "flows": [
     {
@@ -61,7 +62,8 @@
       "name": "POST null body -> 400",
       "legacy_status": 400,
       "modern_status": 400,
-      "verdict": "mismatch",
+      "verdict": "justified",
+      "justification": ".NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231",
       "diffs": [
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1' != 'https://tools.ietf.org/html/rfc9110#section-15.5.1'"
       ]
@@ -71,7 +73,8 @@
       "name": "POST missing degree -> 400",
       "legacy_status": 400,
       "modern_status": 400,
-      "verdict": "mismatch",
+      "verdict": "justified",
+      "justification": "System.Text.Json reworded the missing-required-properties message in .NET 9; .NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231",
       "diffs": [
         "body.errors.$[0]: \"JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties, including the following: degree\" != \"JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties including: 'degree'.\"",
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1' != 'https://tools.ietf.org/html/rfc9110#section-15.5.1'"
@@ -82,7 +85,8 @@
       "name": "POST missing fieldOfStudy -> 400",
       "legacy_status": 400,
       "modern_status": 400,
-      "verdict": "mismatch",
+      "verdict": "justified",
+      "justification": "System.Text.Json reworded the missing-required-properties message in .NET 9; .NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231",
       "diffs": [
         "body.errors.$[0]: \"JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties, including the following: fieldOfStudy\" != \"JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties including: 'fieldOfStudy'.\"",
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1' != 'https://tools.ietf.org/html/rfc9110#section-15.5.1'"
@@ -93,7 +97,8 @@
       "name": "POST missing school -> 400",
       "legacy_status": 400,
       "modern_status": 400,
-      "verdict": "mismatch",
+      "verdict": "justified",
+      "justification": "System.Text.Json reworded the missing-required-properties message in .NET 9; .NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231",
       "diffs": [
         "body.errors.$[0]: \"JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties, including the following: school\" != \"JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties including: 'school'.\"",
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1' != 'https://tools.ietf.org/html/rfc9110#section-15.5.1'"
@@ -104,7 +109,8 @@
       "name": "POST Degree > 50 chars",
       "legacy_status": 500,
       "modern_status": 500,
-      "verdict": "mismatch",
+      "verdict": "justified",
+      "justification": ".NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231",
       "diffs": [
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.6.1' != 'https://tools.ietf.org/html/rfc9110#section-15.6.1'"
       ]
@@ -114,7 +120,8 @@
       "name": "POST FieldOfStudy/School > 250 chars",
       "legacy_status": 500,
       "modern_status": 500,
-      "verdict": "mismatch",
+      "verdict": "justified",
+      "justification": ".NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231",
       "diffs": [
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.6.1' != 'https://tools.ietf.org/html/rfc9110#section-15.6.1'"
       ]
@@ -124,7 +131,8 @@
       "name": "POST Description > 1000 chars",
       "legacy_status": 500,
       "modern_status": 500,
-      "verdict": "mismatch",
+      "verdict": "justified",
+      "justification": ".NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231",
       "diffs": [
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.6.1' != 'https://tools.ietf.org/html/rfc9110#section-15.6.1'"
       ]
@@ -158,7 +166,8 @@
       "name": "PUT unknown id -> 400",
       "legacy_status": 400,
       "modern_status": 400,
-      "verdict": "mismatch",
+      "verdict": "justified",
+      "justification": ".NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231",
       "diffs": [
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1' != 'https://tools.ietf.org/html/rfc9110#section-15.5.1'"
       ]
@@ -168,7 +177,8 @@
       "name": "PUT null body -> 400",
       "legacy_status": 400,
       "modern_status": 400,
-      "verdict": "mismatch",
+      "verdict": "justified",
+      "justification": ".NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231",
       "diffs": [
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1' != 'https://tools.ietf.org/html/rfc9110#section-15.5.1'"
       ]
@@ -186,7 +196,8 @@
       "name": "DELETE unknown id -> 400",
       "legacy_status": 400,
       "modern_status": 400,
-      "verdict": "mismatch",
+      "verdict": "justified",
+      "justification": ".NET 8+ ProblemDetails uses RFC 9110 section URLs instead of RFC 7231",
       "diffs": [
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1' != 'https://tools.ietf.org/html/rfc9110#section-15.5.1'"
       ]
