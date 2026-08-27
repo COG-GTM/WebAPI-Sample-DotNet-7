@@ -1,0 +1,17 @@
+{
+  "body": {
+    "degree": "Master's degree",
+    "description": "Golden snapshot flow",
+    "fieldOfStudy": "Computer science",
+    "id": "<CREATED_ID_F5>",
+    "school": "Parity university"
+  },
+  "flow": 14,
+  "name": "GET after create matches",
+  "request": {
+    "body": null,
+    "method": "GET",
+    "path": "/api/educations/<CREATED_ID_F5>"
+  },
+  "status": 200
+}

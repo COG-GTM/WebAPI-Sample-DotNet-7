@@ -1,0 +1,11 @@
+{
+  "body": null,
+  "flow": 4,
+  "name": "GET malformed guid -> 404",
+  "request": {
+    "body": null,
+    "method": "GET",
+    "path": "/api/educations/not-a-guid"
+  },
+  "status": 404
+}

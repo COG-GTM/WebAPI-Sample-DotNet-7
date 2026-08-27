@@ -1,0 +1,16 @@
+{
+  "body": {
+    "status": 400,
+    "title": "Bad Request",
+    "traceId": "<TRACE_ID>",
+    "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+  },
+  "flow": 19,
+  "name": "DELETE unknown id -> 400",
+  "request": {
+    "body": null,
+    "method": "DELETE",
+    "path": "/api/educations/00000000-0000-0000-0000-000000000001"
+  },
+  "status": 400
+}

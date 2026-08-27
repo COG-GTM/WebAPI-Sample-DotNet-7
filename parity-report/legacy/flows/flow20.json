@@ -1,0 +1,31 @@
+{
+  "body": {
+    "create": {
+      "degree": "Lifecycle degree",
+      "description": "Golden snapshot flow",
+      "fieldOfStudy": "Computer science",
+      "id": "<CREATED_ID_F20>",
+      "school": "Parity university"
+    },
+    "create_status": 200,
+    "delete": null,
+    "delete_status": 200,
+    "get_after_delete": null,
+    "get_after_delete_status": 204,
+    "update": null,
+    "update_status": 200
+  },
+  "flow": 20,
+  "name": "create -> update -> delete lifecycle",
+  "request": {
+    "body": {
+      "degree": "Lifecycle degree",
+      "description": "Golden snapshot flow",
+      "fieldOfStudy": "Computer science",
+      "school": "Parity university"
+    },
+    "method": "MULTI",
+    "path": "/api/educations/<CREATED_ID_F20>"
+  },
+  "status": 200
+}

@@ -1,0 +1,15 @@
+{
+  "body": {
+    "delete_response": null,
+    "get_after_delete": null,
+    "get_after_delete_status": 204
+  },
+  "flow": 18,
+  "name": "DELETE valid -> 200; GET -> 204",
+  "request": {
+    "body": null,
+    "method": "DELETE",
+    "path": "/api/educations/<CREATED_ID_F5>"
+  },
+  "status": 200
+}
