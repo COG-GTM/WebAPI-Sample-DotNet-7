@@ -1,7 +1,15 @@
 {
   "body": {
+    "errors": {
+      "": [
+        "A non-empty request body is required."
+      ],
+      "model": [
+        "The model field is required."
+      ]
+    },
     "status": 400,
-    "title": "Bad Request",
+    "title": "One or more validation errors occurred.",
     "traceId": "<TRACE_ID>",
     "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1"
   },

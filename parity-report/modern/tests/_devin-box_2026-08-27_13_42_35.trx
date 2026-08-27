@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="ad22e558-7735-4cf8-be3a-6cb72c44b7c0" name="@devin-box 2026-08-27 13:42:35" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-27T13:42:35.7379292+00:00" queuing="2026-08-27T13:42:35.7379293+00:00" start="2026-08-27T13:42:34.9788151+00:00" finish="2026-08-27T13:42:35.7758852+00:00" />
+  <TestSettings name="default" id="7b87d840-e98a-4406-a08a-ee4b950ce3b6">
+    <Deployment runDeploymentRoot="_devin-box_2026-08-27_13_42_35" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="d533fc1a-2b87-4707-adc9-831323b5cc91" testId="6d417eea-a35c-05f1-eda4-f8c48641cd2d" testName="WebApi.Tests.EducationsControllerTests.GetById_On_Exception_Returns_InternalServerError" computerName="devin-box" duration="00:00:00.0009648" startTime="2026-08-27T13:42:35.6788051+00:00" endTime="2026-08-27T13:42:35.6788763+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d533fc1a-2b87-4707-adc9-831323b5cc91" />
+    <UnitTestResult executionId="fa2e9828-6bd0-4b53-a50a-4273441bad8a" testId="2dab7e2f-c36f-84c7-b9ec-4469c59055db" testName="WebApi.Tests.EducationsControllerTests.Put_With_Null_Input_Returns_BadRequest" computerName="devin-box" duration="00:00:00.0047621" startTime="2026-08-27T13:42:35.6991900+00:00" endTime="2026-08-27T13:42:35.6992730+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fa2e9828-6bd0-4b53-a50a-4273441bad8a" />
+    <UnitTestResult executionId="becda623-ef7e-4e48-96ba-88f2984da93e" testId="71774461-1e44-8e15-5e53-dcbe63697126" testName="WebApi.Tests.EducationsControllerTests.Get_With_Data_Returns_Ok" computerName="devin-box" duration="00:00:00.0927497" startTime="2026-08-27T13:42:35.5665597+00:00" endTime="2026-08-27T13:42:35.6666925+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="becda623-ef7e-4e48-96ba-88f2984da93e" />
+    <UnitTestResult executionId="a2b407e4-c51e-4d61-a961-93b4fdb0aca4" testId="561b088a-ff4d-b54b-3a3b-bf53aadb9ed9" testName="WebApi.Tests.EducationsControllerTests.Post_With_Valid_Model_Returns_Ok" computerName="devin-box" duration="00:00:00.0008088" startTime="2026-08-27T13:42:35.6994613+00:00" endTime="2026-08-27T13:42:35.6995393+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a2b407e4-c51e-4d61-a961-93b4fdb0aca4" />
+    <UnitTestResult executionId="f12eb1ba-34be-41da-be45-8c78c6296b66" testId="359dd838-451b-d12e-0968-7197a481b3af" testName="WebApi.Tests.EducationsControllerTests.Put_On_Exception_Returns_InternalServerError" computerName="devin-box" duration="00:00:00.0009078" startTime="2026-08-27T13:42:35.6987323+00:00" endTime="2026-08-27T13:42:35.6988318+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f12eb1ba-34be-41da-be45-8c78c6296b66" />
+    <UnitTestResult executionId="b78eee6f-4983-44e9-9b6f-d56bc7ce345d" testId="5b6daf35-30e4-69bc-51d3-33b7d9f6c074" testName="WebApi.Tests.EducationsControllerTests.Delete_For_Failed_Deletion_Returns_BadRequest" computerName="devin-box" duration="00:00:00.0034317" startTime="2026-08-27T13:42:35.6793213+00:00" endTime="2026-08-27T13:42:35.6809417+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b78eee6f-4983-44e9-9b6f-d56bc7ce345d" />
+    <UnitTestResult executionId="197eef8a-3013-4bf8-ac16-598a8c903eee" testId="de497940-c633-9cbd-411e-0fb77ca03ce6" testName="WebApi.Tests.EducationsControllerTests.Put_For_Successful_Update_Returns_Ok" computerName="devin-box" duration="00:00:00.0027091" startTime="2026-08-27T13:42:35.6819516+00:00" endTime="2026-08-27T13:42:35.6845869+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="197eef8a-3013-4bf8-ac16-598a8c903eee" />
+    <UnitTestResult executionId="de4879a3-cff2-4503-9866-43c8266ae496" testId="c71dde4a-9275-baa1-e107-60fcbdf9c097" testName="WebApi.Tests.EducationsControllerTests.Post_With_Null_Input_Returns_BadRequest" computerName="devin-box" duration="00:00:00.0017485" startTime="2026-08-27T13:42:35.6790677+00:00" endTime="2026-08-27T13:42:35.6791551+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="de4879a3-cff2-4503-9866-43c8266ae496" />
+    <UnitTestResult executionId="f5fc7052-dc54-436f-85b5-e543376db9c3" testId="1addb990-78dd-769e-48db-df6576a72a8c" testName="WebApi.Tests.EducationsControllerTests.Delete_On_Exception_Returns_InternalServerError" computerName="devin-box" duration="00:00:00.0007057" startTime="2026-08-27T13:42:35.6997238+00:00" endTime="2026-08-27T13:42:35.6997987+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f5fc7052-dc54-436f-85b5-e543376db9c3" />
+    <UnitTestResult executionId="a81c6460-612b-44ef-8573-69496bdfc0a2" testId="d3183da6-da70-b839-6a8d-79bff47370f4" testName="WebApi.Tests.EducationsControllerTests.GetById_With_Valid_Id_Returns_Ok" computerName="devin-box" duration="00:00:00.0056849" startTime="2026-08-27T13:42:35.6776507+00:00" endTime="2026-08-27T13:42:35.6777665+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a81c6460-612b-44ef-8573-69496bdfc0a2" />
+    <UnitTestResult executionId="f50009ea-d7a1-47e3-b373-9f87a8fc1ff9" testId="059778d6-fbe5-3764-a604-60e2339f71f0" testName="WebApi.Tests.EducationsControllerTests.Get_On_Exception_Returns_InternalServerError" computerName="devin-box" duration="00:00:00.0017216" startTime="2026-08-27T13:42:35.6785268+00:00" endTime="2026-08-27T13:42:35.6786091+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f50009ea-d7a1-47e3-b373-9f87a8fc1ff9" />
+    <UnitTestResult executionId="06f90731-710b-4723-84f3-33b3adb8745a" testId="ffc97817-56ef-1225-2903-d77393f4e749" testName="WebApi.Tests.EducationsControllerTests.Delete_For_Successful_Deletion_Returns_Ok" computerName="devin-box" duration="00:00:00.0008329" startTime="2026-08-27T13:42:35.6811746+00:00" endTime="2026-08-27T13:42:35.6817564+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="06f90731-710b-4723-84f3-33b3adb8745a" />
+    <UnitTestResult executionId="20da4aee-7d42-4867-b33b-d6cec27776a6" testId="3264eacc-79cf-4da5-b10c-12767c8488c3" testName="WebApi.Tests.EducationsControllerTests.Put_For_Failed_Update_Returns_BadRequest" computerName="devin-box" duration="00:00:00.0007794" startTime="2026-08-27T13:42:35.6999794+00:00" endTime="2026-08-27T13:42:35.7000701+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="20da4aee-7d42-4867-b33b-d6cec27776a6" />
+    <UnitTestResult executionId="1989400f-add3-490a-a0ac-76f5b2061242" testId="fbcc4fcb-280f-951d-f8ee-5133684b905c" testName="WebApi.Tests.EducationsControllerTests.Post_On_Exception_Returns_InternalServerError" computerName="devin-box" duration="00:00:00.0010574" startTime="2026-08-27T13:42:35.6848135+00:00" endTime="2026-08-27T13:42:35.6856696+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1989400f-add3-490a-a0ac-76f5b2061242" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.Delete_On_Exception_Returns_InternalServerError" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="1addb990-78dd-769e-48db-df6576a72a8c">
+      <Execution id="f5fc7052-dc54-436f-85b5-e543376db9c3" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="Delete_On_Exception_Returns_InternalServerError" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.Post_With_Null_Input_Returns_BadRequest" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="c71dde4a-9275-baa1-e107-60fcbdf9c097">
+      <Execution id="de4879a3-cff2-4503-9866-43c8266ae496" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="Post_With_Null_Input_Returns_BadRequest" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.Get_With_Data_Returns_Ok" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="71774461-1e44-8e15-5e53-dcbe63697126">
+      <Execution id="becda623-ef7e-4e48-96ba-88f2984da93e" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="Get_With_Data_Returns_Ok" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.Put_For_Failed_Update_Returns_BadRequest" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="3264eacc-79cf-4da5-b10c-12767c8488c3">
+      <Execution id="20da4aee-7d42-4867-b33b-d6cec27776a6" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="Put_For_Failed_Update_Returns_BadRequest" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.Get_On_Exception_Returns_InternalServerError" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="059778d6-fbe5-3764-a604-60e2339f71f0">
+      <Execution id="f50009ea-d7a1-47e3-b373-9f87a8fc1ff9" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="Get_On_Exception_Returns_InternalServerError" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.GetById_With_Valid_Id_Returns_Ok" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="d3183da6-da70-b839-6a8d-79bff47370f4">
+      <Execution id="a81c6460-612b-44ef-8573-69496bdfc0a2" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="GetById_With_Valid_Id_Returns_Ok" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.Post_With_Valid_Model_Returns_Ok" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="561b088a-ff4d-b54b-3a3b-bf53aadb9ed9">
+      <Execution id="a2b407e4-c51e-4d61-a961-93b4fdb0aca4" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="Post_With_Valid_Model_Returns_Ok" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.Put_On_Exception_Returns_InternalServerError" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="359dd838-451b-d12e-0968-7197a481b3af">
+      <Execution id="f12eb1ba-34be-41da-be45-8c78c6296b66" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="Put_On_Exception_Returns_InternalServerError" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.Put_For_Successful_Update_Returns_Ok" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="de497940-c633-9cbd-411e-0fb77ca03ce6">
+      <Execution id="197eef8a-3013-4bf8-ac16-598a8c903eee" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="Put_For_Successful_Update_Returns_Ok" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.GetById_On_Exception_Returns_InternalServerError" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="6d417eea-a35c-05f1-eda4-f8c48641cd2d">
+      <Execution id="d533fc1a-2b87-4707-adc9-831323b5cc91" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="GetById_On_Exception_Returns_InternalServerError" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.Put_With_Null_Input_Returns_BadRequest" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="2dab7e2f-c36f-84c7-b9ec-4469c59055db">
+      <Execution id="fa2e9828-6bd0-4b53-a50a-4273441bad8a" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="Put_With_Null_Input_Returns_BadRequest" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.Post_On_Exception_Returns_InternalServerError" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="fbcc4fcb-280f-951d-f8ee-5133684b905c">
+      <Execution id="1989400f-add3-490a-a0ac-76f5b2061242" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="Post_On_Exception_Returns_InternalServerError" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.Delete_For_Failed_Deletion_Returns_BadRequest" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="5b6daf35-30e4-69bc-51d3-33b7d9f6c074">
+      <Execution id="b78eee6f-4983-44e9-9b6f-d56bc7ce345d" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="Delete_For_Failed_Deletion_Returns_BadRequest" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.EducationsControllerTests.Delete_For_Successful_Deletion_Returns_Ok" storage="/home/ubuntu/repos/webapi-sample-dotnet-7/tests/webapi.tests/bin/debug/net9.0/webapi.tests.dll" id="ffc97817-56ef-1225-2903-d77393f4e749">
+      <Execution id="06f90731-710b-4723-84f3-33b3adb8745a" />
+      <TestMethod codeBase="/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="WebApi.Tests.EducationsControllerTests" name="Delete_For_Successful_Deletion_Returns_Ok" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="6d417eea-a35c-05f1-eda4-f8c48641cd2d" executionId="d533fc1a-2b87-4707-adc9-831323b5cc91" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2dab7e2f-c36f-84c7-b9ec-4469c59055db" executionId="fa2e9828-6bd0-4b53-a50a-4273441bad8a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="71774461-1e44-8e15-5e53-dcbe63697126" executionId="becda623-ef7e-4e48-96ba-88f2984da93e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="561b088a-ff4d-b54b-3a3b-bf53aadb9ed9" executionId="a2b407e4-c51e-4d61-a961-93b4fdb0aca4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="359dd838-451b-d12e-0968-7197a481b3af" executionId="f12eb1ba-34be-41da-be45-8c78c6296b66" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5b6daf35-30e4-69bc-51d3-33b7d9f6c074" executionId="b78eee6f-4983-44e9-9b6f-d56bc7ce345d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="de497940-c633-9cbd-411e-0fb77ca03ce6" executionId="197eef8a-3013-4bf8-ac16-598a8c903eee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c71dde4a-9275-baa1-e107-60fcbdf9c097" executionId="de4879a3-cff2-4503-9866-43c8266ae496" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1addb990-78dd-769e-48db-df6576a72a8c" executionId="f5fc7052-dc54-436f-85b5-e543376db9c3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d3183da6-da70-b839-6a8d-79bff47370f4" executionId="a81c6460-612b-44ef-8573-69496bdfc0a2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="059778d6-fbe5-3764-a604-60e2339f71f0" executionId="f50009ea-d7a1-47e3-b373-9f87a8fc1ff9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ffc97817-56ef-1225-2903-d77393f4e749" executionId="06f90731-710b-4723-84f3-33b3adb8745a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3264eacc-79cf-4da5-b10c-12767c8488c3" executionId="20da4aee-7d42-4867-b33b-d6cec27776a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fbcc4fcb-280f-951d-f8ee-5133684b905c" executionId="1989400f-add3-490a-a0ac-76f5b2061242" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="14" executed="14" passed="14" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v4.0.0+05679a7ab5 (64-bit .NET 9.0.19)
+[xUnit.net 00:00:00.09]   Discovering: WebApi.Tests
+[xUnit.net 00:00:00.14]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:00.16]   Starting:    WebApi.Tests
+[xUnit.net 00:00:00.32]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

@@ -14,11 +14,13 @@ A total of 1 test files matched the specified pattern.
 Test run for /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net9.0/WebApi.Tests.dll (.NETCoreApp,Version=v9.0)
 VSTest version 17.14.1 (x64)
 
-Results File: /home/ubuntu/repos/WebAPI-Sample-DotNet-7/parity-report/modern/tests/_devin-box_2026-08-27_13_33_40.trx
-
-Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 211 ms - Application.Tests.dll (net9.0)
 Starting test execution, please wait...
-A total of 1 test files matched the specified pattern.
-Results File: /home/ubuntu/repos/WebAPI-Sample-DotNet-7/parity-report/modern/tests/_devin-box_2026-08-27_13_33_41.trx
+Results File: /home/ubuntu/repos/WebAPI-Sample-DotNet-7/parity-report/modern/tests/_devin-box_2026-08-27_13_42_34.trx
 
-Passed!  - Failed:     0, Passed:    14, Skipped:     0, Total:    14, Duration: 131 ms - WebApi.Tests.dll (net9.0)
+Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 209 ms - Application.Tests.dll (net9.0)
+A total of 1 test files matched the specified pattern.
+Results File: /home/ubuntu/repos/WebAPI-Sample-DotNet-7/parity-report/modern/tests/_devin-box_2026-08-27_13_42_35.trx
+
+Passed!  - Failed:     0, Passed:    14, Skipped:     0, Total:    14, Duration: 133 ms - WebApi.Tests.dll (net9.0)
+
+TEST_EXIT=0

@@ -1,3 +1,4 @@
+Using launch settings from src/WebApi/Properties/launchSettings.json...
 info: Microsoft.Hosting.Lifetime[14]
       Now listening on: http://localhost:5070
 info: Microsoft.Hosting.Lifetime[0]
@@ -9,7 +10,7 @@ info: Microsoft.Hosting.Lifetime[0]
 warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
       Failed to determine the https port for redirect.
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
-      Executed DbCommand (17ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      Executed DbCommand (16ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
       SELECT e."Id", e."Degree", e."Description", e."FieldOfStudy", e."School"
       FROM "Educations" AS e
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
@@ -273,7 +274,7 @@ info: Microsoft.EntityFrameworkCore.Database.Command[20101]
       WHERE e."Id" = @__id_0
       LIMIT 1
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
-      Executed DbCommand (0ms) [Parameters=[@__id_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
       SELECT e."Id", e."Degree", e."Description", e."FieldOfStudy", e."School"
       FROM "Educations" AS e
       WHERE e."Id" = @__id_0
@@ -283,7 +284,7 @@ info: Microsoft.EntityFrameworkCore.Database.Command[20101]
       INSERT INTO "Educations" ("Id", "Degree", "Description", "FieldOfStudy", "School")
       VALUES (@p0, @p1, @p2, @p3, @p4);
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
-      Executed DbCommand (0ms) [Parameters=[@__id_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
       SELECT e."Id", e."Degree", e."Description", e."FieldOfStudy", e."School"
       FROM "Educations" AS e
       WHERE e."Id" = @__id_0
@@ -293,7 +294,7 @@ info: Microsoft.EntityFrameworkCore.Database.Command[20101]
       UPDATE "Educations" SET "Degree" = @p0, "Description" = @p1, "FieldOfStudy" = @p2, "School" = @p3
       WHERE "Id" = @p4;
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
-      Executed DbCommand (0ms) [Parameters=[@__id_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
       SELECT e."Id", e."Degree", e."Description", e."FieldOfStudy", e."School"
       FROM "Educations" AS e
       WHERE e."Id" = @__id_0
@@ -303,7 +304,7 @@ info: Microsoft.EntityFrameworkCore.Database.Command[20101]
       DELETE FROM "Educations"
       WHERE "Id" = @p0;
 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
-      Executed DbCommand (0ms) [Parameters=[@__id_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
       SELECT e."Id", e."Degree", e."Description", e."FieldOfStudy", e."School"
       FROM "Educations" AS e
       WHERE e."Id" = @__id_0

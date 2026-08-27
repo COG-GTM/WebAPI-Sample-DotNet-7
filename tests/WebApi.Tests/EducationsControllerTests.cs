@@ -104,7 +104,7 @@ namespace WebApi.Tests
             var controller = new EducationsController(educationService);
 
             // Act
-            var result = await controller.Post(null);
+            var result = await controller.Post(null!);
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
@@ -167,7 +167,7 @@ namespace WebApi.Tests
             var controller = new EducationsController(educationService);
 
             // Act
-            var result = await controller.Put(Guid.NewGuid(), null);
+            var result = await controller.Put(Guid.NewGuid(), null!);
 
             // Assert
             Assert.IsType<BadRequestResult>(result);

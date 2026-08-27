@@ -63,11 +63,7 @@
       "modern_status": 400,
       "verdict": "mismatch",
       "diffs": [
-        "body.errors: only in legacy ({'': ['A non-empty request body is required.'], 'model': ['The model field is required.']})",
-        "body.status: only in legacy (400)",
-        "body.title: only in legacy ('One or more validation errors occurred.')",
-        "body.traceId: only in legacy ('<TRACE_ID>')",
-        "body.type: only in legacy ('https://tools.ietf.org/html/rfc7231#section-6.5.1')"
+        "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1' != 'https://tools.ietf.org/html/rfc9110#section-15.5.1'"
       ]
     },
     {
@@ -78,7 +74,6 @@
       "verdict": "mismatch",
       "diffs": [
         "body.errors.$[0]: \"JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties, including the following: degree\" != \"JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties including: 'degree'.\"",
-        "body.errors.model: only in legacy (['The model field is required.'])",
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1' != 'https://tools.ietf.org/html/rfc9110#section-15.5.1'"
       ]
     },
@@ -90,7 +85,6 @@
       "verdict": "mismatch",
       "diffs": [
         "body.errors.$[0]: \"JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties, including the following: fieldOfStudy\" != \"JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties including: 'fieldOfStudy'.\"",
-        "body.errors.model: only in legacy (['The model field is required.'])",
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1' != 'https://tools.ietf.org/html/rfc9110#section-15.5.1'"
       ]
     },
@@ -102,7 +96,6 @@
       "verdict": "mismatch",
       "diffs": [
         "body.errors.$[0]: \"JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties, including the following: school\" != \"JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties including: 'school'.\"",
-        "body.errors.model: only in legacy (['The model field is required.'])",
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1' != 'https://tools.ietf.org/html/rfc9110#section-15.5.1'"
       ]
     },
@@ -177,8 +170,6 @@
       "modern_status": 400,
       "verdict": "mismatch",
       "diffs": [
-        "body.errors: only in legacy ({'': ['A non-empty request body is required.'], 'model': ['The model field is required.']})",
-        "body.title: 'One or more validation errors occurred.' != 'Bad Request'",
         "body.type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1' != 'https://tools.ietf.org/html/rfc9110#section-15.5.1'"
       ]
     },

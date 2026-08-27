@@ -3,6 +3,9 @@
     "errors": {
       "$": [
         "JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties including: 'school'."
+      ],
+      "model": [
+        "The model field is required."
       ]
     },
     "status": 400,
