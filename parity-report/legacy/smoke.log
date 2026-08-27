@@ -1,0 +1,20 @@
+boot_pid=9139
+boot_wait_ms=6109
+first_response_status_and_curl_time=200 1.051876
+first_response_body=[{"id":"c92ea179-dd5c-46ca-b7b5-b44a191b974c","degree":"Bachelor's degree","fieldOfStudy":"Software engineering","school":"Sample university","description":null}]
+
+boot_log_tail:
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5070
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/WebApi
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (20ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT e."Id", e."Degree", e."Description", e."FieldOfStudy", e."School"
+      FROM "Educations" AS e

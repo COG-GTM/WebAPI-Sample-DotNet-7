@@ -1,0 +1,49 @@
+
+Welcome to .NET 7.0!
+---------------------
+SDK Version: 7.0.410
+
+Telemetry
+---------
+The .NET tools collect usage data in order to help us improve your experience. It is collected by Microsoft and shared with the community. You can opt-out of telemetry by setting the DOTNET_CLI_TELEMETRY_OPTOUT environment variable to '1' or 'true' using your favorite shell.
+
+Read more about .NET CLI Tools telemetry: https://aka.ms/dotnet-cli-telemetry
+
+----------------
+Installed an ASP.NET Core HTTPS development certificate.
+To trust the certificate run 'dotnet dev-certs https --trust' (Windows and macOS only).
+Learn about HTTPS: https://aka.ms/dotnet-https
+----------------
+Write your first app: https://aka.ms/dotnet-hello-world
+Find out what's new: https://aka.ms/dotnet-whats-new
+Explore documentation: https://aka.ms/dotnet-docs
+Report issues and find source on GitHub: https://github.com/dotnet/core
+Use 'dotnet --help' to see available commands or visit: https://aka.ms/dotnet-cli
+--------------------------------------------------------------------------------------
+MSBuild version 17.7.6+77d58ec69 for .NET
+  Determining projects to restore...
+  Restored /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Domain/Domain.csproj (in 112 ms).
+  Restored /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Application/Application.csproj (in 1.46 sec).
+  Restored /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/Application.Tests/Application.Tests.csproj (in 1.6 sec).
+  Restored /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Infrastructure/Infrastructure.csproj (in 1.68 sec).
+  Restored /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/WebApi/WebApi.csproj (in 1.68 sec).
+  Restored /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/WebApi.Tests.csproj (in 1.69 sec).
+  Domain -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Domain/bin/Debug/net7.0/Domain.dll
+  Application -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Application/bin/Debug/net7.0/Application.dll
+  Application.Tests -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/Application.Tests/bin/Debug/net7.0/Application.Tests.dll
+  Infrastructure -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/Infrastructure/bin/Debug/net7.0/Infrastructure.dll
+/home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/WebApi/Program.cs(16,46): warning CS8604: Possible null reference argument for parameter 'connectionString' in 'IHealthChecksBuilder NpgSqlHealthCheckBuilderExtensions.AddNpgSql(IHealthChecksBuilder builder, string connectionString, string healthQuery = "SELECT 1;", Action<NpgsqlConnection>? configure = null, string? name = null, HealthStatus? failureStatus = null, IEnumerable<string>? tags = null, TimeSpan? timeout = null)'. [/home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/WebApi/WebApi.csproj]
+  WebApi -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/WebApi/bin/Debug/net7.0/WebApi.dll
+/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/EducationsControllerTests.cs(107,48): warning CS8625: Cannot convert null literal to non-nullable reference type. [/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/WebApi.Tests.csproj]
+/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/EducationsControllerTests.cs(170,63): warning CS8625: Cannot convert null literal to non-nullable reference type. [/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/WebApi.Tests.csproj]
+  WebApi.Tests -> /home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/bin/Debug/net7.0/WebApi.Tests.dll
+
+Build succeeded.
+
+/home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/WebApi/Program.cs(16,46): warning CS8604: Possible null reference argument for parameter 'connectionString' in 'IHealthChecksBuilder NpgSqlHealthCheckBuilderExtensions.AddNpgSql(IHealthChecksBuilder builder, string connectionString, string healthQuery = "SELECT 1;", Action<NpgsqlConnection>? configure = null, string? name = null, HealthStatus? failureStatus = null, IEnumerable<string>? tags = null, TimeSpan? timeout = null)'. [/home/ubuntu/repos/WebAPI-Sample-DotNet-7/src/WebApi/WebApi.csproj]
+/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/EducationsControllerTests.cs(107,48): warning CS8625: Cannot convert null literal to non-nullable reference type. [/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/WebApi.Tests.csproj]
+/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/EducationsControllerTests.cs(170,63): warning CS8625: Cannot convert null literal to non-nullable reference type. [/home/ubuntu/repos/WebAPI-Sample-DotNet-7/tests/WebApi.Tests/WebApi.Tests.csproj]
+    3 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:08.20
