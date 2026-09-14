@@ -8,15 +8,15 @@ namespace Application.Dtos
 
         [Required]
         [StringLength(50)]
-        public required string Degree { get; set; }
+        public string Degree { get; set; } = string.Empty;
 
         [Required]
         [StringLength(250)]
-        public required string FieldOfStudy { get; set; }
+        public string FieldOfStudy { get; set; } = string.Empty;
 
         [Required]
         [StringLength(250)]
-        public required string School { get; set; }
+        public string School { get; set; } = string.Empty;
 
         [StringLength(1000)]
         public string? Description { get; set; }

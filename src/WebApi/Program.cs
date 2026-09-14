@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using System.Text.Json.Serialization.Metadata;
-using Application.Dtos;
 using Application.Interfaces;
 using Application.Service.Interfaces;
 using Application.Service;
@@ -8,32 +6,12 @@ using Infrastructure.DbContexts;
 using Infrastructure.UoW;
 using WebApi.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.TypeInfoResolver = new DefaultJsonTypeInfoResolver
-        {
-            Modifiers =
-            {
-                typeInfo =>
-                {
-                    if (typeInfo.Type == typeof(EducationDto))
-                    {
-                        foreach (var property in typeInfo.Properties)
-                        {
-                            property.IsRequired = false;
-                        }
-                    }
-                }
-            }
-        };
-    });
+builder.Services.AddControllers();
 builder.Services.AddProblemDetails(options =>
 {
     options.CustomizeProblemDetails = context =>

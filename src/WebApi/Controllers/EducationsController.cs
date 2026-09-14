@@ -32,10 +32,10 @@ public class EducationsController : ControllerBase
     {
         var result = await _educationService.GetById(id);
         return result is null
-            ? ProblemResult(
-                StatusCodes.Status404NotFound,
-                "Education not found.",
-                $"No education with id '{id}' exists.")
+            ? Problem(
+                statusCode: StatusCodes.Status404NotFound,
+                title: "Education not found.",
+                detail: $"No education with id '{id}' exists.")
             : Ok(result);
     }
 
@@ -47,7 +47,7 @@ public class EducationsController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
-            return ValidationProblemResult();
+            return ValidationProblem(ModelState);
         }
 
         var result = await _educationService.Add(model);
@@ -63,24 +63,24 @@ public class EducationsController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
-            return ValidationProblemResult();
+            return ValidationProblem(ModelState);
         }
 
         if (model.Id != id)
         {
-            return ProblemResult(
-                StatusCodes.Status400BadRequest,
-                "Route id and body id do not match.",
-                "The route id and body id must be the same.");
+            return Problem(
+                statusCode: StatusCodes.Status400BadRequest,
+                title: "Route id and body id do not match.",
+                detail: "The route id and body id must be the same.");
         }
 
         var result = await _educationService.Update(id, model);
         return result
             ? NoContent()
-            : ProblemResult(
-                StatusCodes.Status404NotFound,
-                "Education not found.",
-                $"No education with id '{id}' exists.");
+            : Problem(
+                statusCode: StatusCodes.Status404NotFound,
+                title: "Education not found.",
+                detail: $"No education with id '{id}' exists.");
     }
 
     [HttpDelete("{id:guid}")]
@@ -92,46 +92,9 @@ public class EducationsController : ControllerBase
         var result = await _educationService.Delete(id);
         return result
             ? NoContent()
-            : ProblemResult(
-                StatusCodes.Status404NotFound,
-                "Education not found.",
-                $"No education with id '{id}' exists.");
-    }
-
-    private ObjectResult ProblemResult(int status, string title, string detail)
-    {
-        if (ControllerContext.HttpContext is not null)
-        {
-            ControllerContext.HttpContext.Response.ContentType = "application/problem+json";
-        }
-        return new ObjectResult(new ProblemDetails
-        {
-            Status = status,
-            Title = title,
-            Detail = detail
-        })
-        {
-            StatusCode = status,
-            ContentTypes = { "application/problem+json" }
-        };
-    }
-
-    private IActionResult ValidationProblemResult()
-    {
-        if (ControllerContext.HttpContext is not null)
-        {
-            ControllerContext.HttpContext.Response.ContentType = "application/problem+json";
-        }
-        var result = ValidationProblem(ModelState);
-        if (result is ObjectResult objectResult)
-        {
-            objectResult.StatusCode = StatusCodes.Status400BadRequest;
-            if (objectResult.Value is ProblemDetails problemDetails)
-            {
-                problemDetails.Status = StatusCodes.Status400BadRequest;
-            }
-        }
-
-        return result;
+            : Problem(
+                statusCode: StatusCodes.Status404NotFound,
+                title: "Education not found.",
+                detail: $"No education with id '{id}' exists.");
     }
 }

@@ -1,7 +1,9 @@
 using Application.Dtos;
 using Application.Service.Interfaces;
 using FakeItEasy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using WebApi.Controllers;
 
 namespace WebApi.Tests;
@@ -15,7 +17,7 @@ public class EducationsControllerTests
     {
         var data = new[] { ValidEducation(), ValidEducation() };
         A.CallTo(() => _educationService.GetAll()).Returns(data);
-        var controller = new EducationsController(_educationService);
+        var controller = CreateController(_educationService);
 
         var result = await controller.Get();
 
@@ -28,7 +30,7 @@ public class EducationsControllerTests
     {
         var education = ValidEducation();
         A.CallTo(() => _educationService.GetById(education.Id)).Returns(education);
-        var controller = new EducationsController(_educationService);
+        var controller = CreateController(_educationService);
 
         var result = await controller.Get(education.Id);
 
@@ -41,7 +43,7 @@ public class EducationsControllerTests
     {
         var id = Guid.NewGuid();
         A.CallTo(() => _educationService.GetById(id)).Returns((EducationDto?)null);
-        var controller = new EducationsController(_educationService);
+        var controller = CreateController(_educationService);
 
         var result = await controller.Get(id);
 
@@ -55,7 +57,7 @@ public class EducationsControllerTests
         var created = ValidEducation();
         created.Id = Guid.NewGuid();
         A.CallTo(() => _educationService.Add(model)).Returns(created);
-        var controller = new EducationsController(_educationService);
+        var controller = CreateController(_educationService);
 
         var result = await controller.Post(model);
 
@@ -69,12 +71,12 @@ public class EducationsControllerTests
     [Fact]
     public async Task Post_Returns_Validation_Problem_When_ModelState_Is_Invalid()
     {
-        var controller = new EducationsController(_educationService);
+        var controller = CreateController(_educationService);
         controller.ModelState.AddModelError(nameof(EducationDto.Degree), "The Degree field is required.");
 
         var result = await controller.Post(ValidEducation());
 
-        var badRequest = Assert.IsType<ObjectResult>(result);
+        var badRequest = Assert.IsAssignableFrom<ObjectResult>(result);
         var problem = Assert.IsType<ValidationProblemDetails>(badRequest.Value);
         Assert.Equal(400, problem.Status);
         Assert.Contains(nameof(EducationDto.Degree), problem.Errors.Keys);
@@ -83,12 +85,12 @@ public class EducationsControllerTests
     [Fact]
     public async Task Put_Returns_Validation_Problem_When_ModelState_Is_Invalid()
     {
-        var controller = new EducationsController(_educationService);
+        var controller = CreateController(_educationService);
         controller.ModelState.AddModelError(nameof(EducationDto.School), "The School field is required.");
 
         var result = await controller.Put(Guid.NewGuid(), ValidEducation());
 
-        var badRequest = Assert.IsType<ObjectResult>(result);
+        var badRequest = Assert.IsAssignableFrom<ObjectResult>(result);
         Assert.IsType<ValidationProblemDetails>(badRequest.Value);
     }
 
@@ -98,7 +100,7 @@ public class EducationsControllerTests
         var routeId = Guid.NewGuid();
         var model = ValidEducation();
         model.Id = Guid.NewGuid();
-        var controller = new EducationsController(_educationService);
+        var controller = CreateController(_educationService);
 
         var result = await controller.Put(routeId, model);
 
@@ -112,7 +114,7 @@ public class EducationsControllerTests
         var model = ValidEducation();
         model.Id = id;
         A.CallTo(() => _educationService.Update(id, model)).Returns(false);
-        var controller = new EducationsController(_educationService);
+        var controller = CreateController(_educationService);
 
         var result = await controller.Put(id, model);
 
@@ -126,7 +128,7 @@ public class EducationsControllerTests
         var model = ValidEducation();
         model.Id = id;
         A.CallTo(() => _educationService.Update(id, model)).Returns(true);
-        var controller = new EducationsController(_educationService);
+        var controller = CreateController(_educationService);
 
         var result = await controller.Put(id, model);
 
@@ -138,7 +140,7 @@ public class EducationsControllerTests
     {
         var id = Guid.NewGuid();
         A.CallTo(() => _educationService.Delete(id)).Returns(false);
-        var controller = new EducationsController(_educationService);
+        var controller = CreateController(_educationService);
 
         var result = await controller.Delete(id);
 
@@ -150,7 +152,7 @@ public class EducationsControllerTests
     {
         var id = Guid.NewGuid();
         A.CallTo(() => _educationService.Delete(id)).Returns(true);
-        var controller = new EducationsController(_educationService);
+        var controller = CreateController(_educationService);
 
         var result = await controller.Delete(id);
 
@@ -169,9 +171,29 @@ public class EducationsControllerTests
         };
     }
 
+    private static EducationsController CreateController(IEducationService service)
+    {
+        var services = new ServiceCollection();
+        services.AddLogging();
+        services.AddControllers();
+        services.AddProblemDetails();
+        var provider = services.BuildServiceProvider();
+
+        return new EducationsController(service)
+        {
+            ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    RequestServices = provider
+                }
+            }
+        };
+    }
+
     private static void AssertProblem(IActionResult result, int status, string title)
     {
-        var objectResult = Assert.IsType<ObjectResult>(result);
+        var objectResult = Assert.IsAssignableFrom<ObjectResult>(result);
         Assert.Equal(status, objectResult.StatusCode);
         var problem = Assert.IsType<ProblemDetails>(objectResult.Value);
         Assert.Equal(status, problem.Status);
