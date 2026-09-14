@@ -1,11 +1,24 @@
-﻿namespace Application.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Application.Dtos
 {
     public class EducationDto
     {
         public Guid Id { get; set; }
-        public required string Degree { get; set; }
-        public required string FieldOfStudy { get; set; }
-        public required string School { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Degree { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(250)]
+        public string FieldOfStudy { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(250)]
+        public string School { get; set; } = string.Empty;
+
+        [StringLength(1000)]
         public string? Description { get; set; }
     }
 }
