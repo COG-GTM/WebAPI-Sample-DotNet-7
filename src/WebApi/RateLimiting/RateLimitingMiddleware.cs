@@ -19,7 +19,7 @@ namespace WebApi.RateLimiting
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (context.Request.Path.StartsWithSegments(HealthCheckPath))
+            if (context.Request.Path.Equals(HealthCheckPath, StringComparison.OrdinalIgnoreCase))
             {
                 await _next(context);
                 return;
@@ -58,7 +58,13 @@ namespace WebApi.RateLimiting
     {
         public static IServiceCollection AddRateLimiting(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<RateLimitOptions>(configuration.GetSection(RateLimitOptions.SectionName));
+            services.AddOptions<RateLimitOptions>()
+                .Bind(configuration.GetSection(RateLimitOptions.SectionName))
+                .Validate(o => o.AnonymousRequestsPerMinute > 0 && o.AuthenticatedRequestsPerMinute > 0,
+                    "RateLimiting: both per-minute limits must be greater than zero.")
+                .Validate(o => !string.IsNullOrWhiteSpace(o.ApiKeyHeaderName),
+                    "RateLimiting:ApiKeyHeaderName must not be empty.")
+                .ValidateOnStart();
             services.AddSingleton<IRateLimiter, FixedWindowRateLimiter>();
             return services;
         }

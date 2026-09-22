@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 
 namespace WebApi.RateLimiting
 {
@@ -11,17 +12,18 @@ namespace WebApi.RateLimiting
 
     /// <summary>
     /// In-memory fixed-window (one minute) counter keyed by client identifier.
+    /// Uses a monotonic clock so wall-clock adjustments cannot stretch or shrink a window.
     /// </summary>
     public class FixedWindowRateLimiter : IRateLimiter
     {
         private static readonly TimeSpan Window = TimeSpan.FromMinutes(1);
 
         private readonly ConcurrentDictionary<string, WindowCounter> _counters = new();
-        private readonly Func<DateTimeOffset> _clock;
+        private readonly Func<TimeSpan> _clock;
 
-        public FixedWindowRateLimiter() : this(() => DateTimeOffset.UtcNow) { }
+        public FixedWindowRateLimiter() : this(() => Stopwatch.GetElapsedTime(0)) { }
 
-        public FixedWindowRateLimiter(Func<DateTimeOffset> clock)
+        public FixedWindowRateLimiter(Func<TimeSpan> clock)
         {
             _clock = clock;
         }
@@ -53,7 +55,7 @@ namespace WebApi.RateLimiting
 
         private sealed class WindowCounter
         {
-            public DateTimeOffset WindowStart = DateTimeOffset.MinValue;
+            public TimeSpan WindowStart = TimeSpan.MinValue;
             public int Count;
         }
     }
