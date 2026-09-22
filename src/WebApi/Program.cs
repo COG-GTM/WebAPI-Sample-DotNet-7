@@ -4,6 +4,7 @@ using Application.Service;
 using Infrastructure.DbContexts;
 using Infrastructure.UoW;
 using Microsoft.EntityFrameworkCore;
+using WebApi.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services.AddHealthChecks().AddNpgSql(builder.Configuration.GetConnection
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEducationService, EducationService>();
+
+builder.Services.AddRateLimiting(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -33,8 +36,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRateLimiting();
+
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks(RateLimitingMiddleware.HealthCheckPath);
 
 app.Run();
+
+public partial class Program { }

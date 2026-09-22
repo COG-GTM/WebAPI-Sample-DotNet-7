@@ -61,5 +61,24 @@ update-database
 
 This command will generate the database schema in postgres container.
 
+## Configuration
+
+Settings live in `src/WebApi/appsettings.json` and can be overridden with environment variables using the standard `Section__Key` form (see `docker-compose.yml`, which sets `ConnectionStrings__DefaultConnection`).
+
+| Setting | Environment variable | Default | Description |
+| --- | --- | --- | --- |
+| `ConnectionStrings:DefaultConnection` | `ConnectionStrings__DefaultConnection` | local postgres on port 5433 | PostgreSQL connection string |
+| `RateLimiting:AnonymousRequestsPerMinute` | `RateLimiting__AnonymousRequestsPerMinute` | `60` | Requests per minute allowed per client IP when no API key is sent |
+| `RateLimiting:AuthenticatedRequestsPerMinute` | `RateLimiting__AuthenticatedRequestsPerMinute` | `600` | Requests per minute allowed per API key |
+| `RateLimiting:ApiKeyHeaderName` | `RateLimiting__ApiKeyHeaderName` | `X-Api-Key` | Header whose value identifies an authenticated client |
+
+### Rate limiting
+
+Every route except the health check (`GET /health`) is rate limited with a one-minute fixed window. Requests carrying the API key header are counted per key; all other requests are counted per client IP. When a limit is exceeded the API responds with `429 Too Many Requests`, a `Retry-After` header (seconds until the window resets) and the body:
+
+```json
+{ "error": "rate_limited", "retry_after_seconds": 42 }
+```
+
 ## Contributions
 Contributions are welcomed! If you identify areas for improvement, please feel free to raise an issue or submit a pull request.
