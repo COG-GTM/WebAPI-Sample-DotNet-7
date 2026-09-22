@@ -61,5 +61,32 @@ update-database
 
 This command will generate the database schema in postgres container.
 
+## Configuration
+
+Settings are read from `src/WebApi/appsettings.json` and can be overridden with environment variables using `__` as the section separator (as `docker-compose.yml` does for `ConnectionStrings__DefaultConnection`).
+
+| Setting | Environment variable | Default | Description |
+| --- | --- | --- | --- |
+| `ConnectionStrings:DefaultConnection` | `ConnectionStrings__DefaultConnection` | local postgres | PostgreSQL connection string |
+| `RateLimiting:UnauthenticatedRequestsPerMinute` | `RateLimiting__UnauthenticatedRequestsPerMinute` | `60` | Requests per minute allowed per client IP when no API key is sent |
+| `RateLimiting:AuthenticatedRequestsPerMinute` | `RateLimiting__AuthenticatedRequestsPerMinute` | `600` | Requests per minute allowed per API key |
+| `RateLimiting:ApiKeyHeaderName` | `RateLimiting__ApiKeyHeaderName` | `X-Api-Key` | Header whose value identifies an authenticated client |
+
+### Rate limiting
+
+Every route except the health check (`GET /health`) is rate limited with a fixed one-minute window. Requests carrying the API key header are counted per key; all others are counted per client IP. When a limit is exceeded the API responds with `429 Too Many Requests`, a `Retry-After` header (seconds) and the body:
+
+```json
+{ "error": "rate_limited", "retry_after_seconds": 42 }
+```
+
+Example override in `docker-compose.yml`:
+
+```yaml
+environment:
+  - RateLimiting__UnauthenticatedRequestsPerMinute=120
+  - RateLimiting__AuthenticatedRequestsPerMinute=1200
+```
+
 ## Contributions
 Contributions are welcomed! If you identify areas for improvement, please feel free to raise an issue or submit a pull request.
