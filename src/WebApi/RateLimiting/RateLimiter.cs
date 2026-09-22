@@ -19,6 +19,7 @@ namespace WebApi.RateLimiting
 
         private readonly Func<DateTimeOffset> _clock;
         private readonly ConcurrentDictionary<string, WindowState> _windows = new();
+        private DateTimeOffset _lastEviction = DateTimeOffset.MinValue;
 
         public RateLimiter() : this(() => DateTimeOffset.UtcNow) { }
 
@@ -30,6 +31,7 @@ namespace WebApi.RateLimiting
         public RateLimitResult TryAcquire(string clientKey, int limitPerMinute)
         {
             var now = _clock();
+            EvictExpired(now);
             var state = _windows.GetOrAdd(clientKey, _ => new WindowState());
 
             lock (state)
@@ -49,6 +51,25 @@ namespace WebApi.RateLimiting
                 var remaining = state.WindowStart + Window - now;
                 var retryAfter = Math.Max(1, (int)Math.Ceiling(remaining.TotalSeconds));
                 return new RateLimitResult(false, retryAfter);
+            }
+        }
+
+        public int TrackedClients => _windows.Count;
+
+        private void EvictExpired(DateTimeOffset now)
+        {
+            if (now - _lastEviction < Window) return;
+            _lastEviction = now;
+
+            foreach (var (key, state) in _windows)
+            {
+                lock (state)
+                {
+                    if (now - state.WindowStart >= Window)
+                    {
+                        _windows.TryRemove(key, out _);
+                    }
+                }
             }
         }
 

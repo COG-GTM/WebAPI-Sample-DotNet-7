@@ -79,6 +79,33 @@ namespace WebApi.Tests
         }
 
         [Fact]
+        public async Task Unknown_Api_Key_Falls_Back_To_Ip_Limit_When_Allowlist_Configured()
+        {
+            using var factory = CreateFactory().WithWebHostBuilder(builder =>
+                builder.UseSetting("RateLimiting:ApiKeys:0", "known-key"));
+            using var client = factory.CreateClient();
+            client.DefaultRequestHeaders.Add("X-Api-Key", "forged-key");
+
+            for (var i = 0; i < UnauthenticatedLimit; i++)
+            {
+                await client.GetAsync("/api/educations");
+            }
+
+            var response = await client.GetAsync("/api/educations");
+
+            Assert.Equal(HttpStatusCode.TooManyRequests, response.StatusCode);
+        }
+
+        [Fact]
+        public void Invalid_Limit_Fails_At_Startup()
+        {
+            using var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
+                builder.UseSetting("RateLimiting:UnauthenticatedRequestsPerMinute", "0"));
+
+            Assert.Throws<Microsoft.Extensions.Options.OptionsValidationException>(() => factory.CreateClient());
+        }
+
+        [Fact]
         public async Task Health_Check_Is_Not_Rate_Limited()
         {
             using var factory = CreateFactory();

@@ -75,6 +75,22 @@ namespace WebApi.Tests
         }
 
         [Fact]
+        public void Evicts_Expired_Clients()
+        {
+            var now = Start;
+            var limiter = new RateLimiter(() => now);
+
+            limiter.TryAcquire("ip:1.1.1.1", 5);
+            limiter.TryAcquire("ip:2.2.2.2", 5);
+            Assert.Equal(2, limiter.TrackedClients);
+
+            now = Start.AddMinutes(2);
+            limiter.TryAcquire("ip:3.3.3.3", 5);
+
+            Assert.Equal(1, limiter.TrackedClients);
+        }
+
+        [Fact]
         public async Task Is_Safe_Under_Concurrent_Access()
         {
             var limiter = new RateLimiter(() => Start);

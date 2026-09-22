@@ -43,7 +43,7 @@ namespace WebApi.RateLimiting
         private (string ClientKey, int Limit) Identify(HttpContext context)
         {
             var apiKey = context.Request.Headers[_options.ApiKeyHeaderName].ToString();
-            if (!string.IsNullOrWhiteSpace(apiKey))
+            if (!string.IsNullOrWhiteSpace(apiKey) && IsKnownApiKey(apiKey))
             {
                 return ($"key:{apiKey}", _options.AuthenticatedRequestsPerMinute);
             }
@@ -51,6 +51,9 @@ namespace WebApi.RateLimiting
             var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
             return ($"ip:{ip}", _options.UnauthenticatedRequestsPerMinute);
         }
+
+        private bool IsKnownApiKey(string apiKey) =>
+            _options.ApiKeys.Length == 0 || _options.ApiKeys.Contains(apiKey, StringComparer.Ordinal);
 
         private sealed record RateLimitedResponse([property: JsonPropertyName("retry_after_seconds")] int RetryAfterSeconds)
         {
@@ -63,7 +66,10 @@ namespace WebApi.RateLimiting
     {
         public static IServiceCollection AddRateLimiting(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<RateLimitingOptions>(configuration.GetSection(RateLimitingOptions.SectionName));
+            services.AddOptions<RateLimitingOptions>()
+                .Bind(configuration.GetSection(RateLimitingOptions.SectionName))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
             services.AddSingleton<IRateLimiter, RateLimiter>();
             return services;
         }

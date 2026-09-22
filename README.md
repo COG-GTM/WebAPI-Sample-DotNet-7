@@ -71,10 +71,13 @@ Settings are read from `src/WebApi/appsettings.json` and can be overridden with 
 | `RateLimiting:UnauthenticatedRequestsPerMinute` | `RateLimiting__UnauthenticatedRequestsPerMinute` | `60` | Requests per minute allowed per client IP when no API key is sent |
 | `RateLimiting:AuthenticatedRequestsPerMinute` | `RateLimiting__AuthenticatedRequestsPerMinute` | `600` | Requests per minute allowed per API key |
 | `RateLimiting:ApiKeyHeaderName` | `RateLimiting__ApiKeyHeaderName` | `X-Api-Key` | Header whose value identifies an authenticated client |
+| `RateLimiting:ApiKeys` | `RateLimiting__ApiKeys__0`, `__1`, ... | `[]` | Allowlist of API keys eligible for the authenticated limit; when empty any non-empty header value counts |
+
+Both limits must be at least 1 and the header name must be non-empty; the application refuses to start otherwise.
 
 ### Rate limiting
 
-Every route except the health check (`GET /health`) is rate limited with a fixed one-minute window. Requests carrying the API key header are counted per key; all others are counted per client IP. When a limit is exceeded the API responds with `429 Too Many Requests`, a `Retry-After` header (seconds) and the body:
+Every route except the health check (`GET /health`) is rate limited with a fixed one-minute window. Requests carrying a recognised API key header are counted per key; all others (including unknown keys when `ApiKeys` is set) are counted per client IP. The IP is `HttpContext.Connection.RemoteIpAddress`; when running behind a reverse proxy, configure [forwarded headers](https://learn.microsoft.com/aspnet/core/host-and-deploy/proxy-load-balancer) so clients are not all counted as the proxy. When a limit is exceeded the API responds with `429 Too Many Requests`, a `Retry-After` header (seconds) and the body:
 
 ```json
 { "error": "rate_limited", "retry_after_seconds": 42 }
