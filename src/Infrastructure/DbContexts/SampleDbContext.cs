@@ -14,11 +14,11 @@ namespace Infrastructure.DbContexts
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            // Seed
+            // Seed: HasData must use a stable key so the model matches the migration snapshot
             modelBuilder.Entity<Education>().HasData(
                 new Education
                 {
-                    Id = Guid.NewGuid(),
+                    Id = new Guid("c92ea179-dd5c-46ca-b7b5-b44a191b974c"),
                     Degree = "Bachelor's degree",
                     FieldOfStudy = "Software engineering",
                     School = "Sample university"
