@@ -4,7 +4,7 @@
 
 ### Purpose
 
-This specification document outlines the design and implementation plan for adding a GraphQL API to the existing ASP.NET Core Web API (.NET 7) sample project. The GraphQL API will provide an alternative interface to the same underlying data and business logic that the REST API currently uses, with both APIs coexisting and sharing the same PostgreSQL database.
+This specification document outlines the design and implementation plan for adding a GraphQL API to the existing ASP.NET Core Web API (.NET 10) sample project. The GraphQL API will provide an alternative interface to the same underlying data and business logic that the REST API currently uses, with both APIs coexisting and sharing the same PostgreSQL database.
 
 ### Current Architecture
 
@@ -107,7 +107,7 @@ Update `src/WebApi/WebApi.csproj` to include HotChocolate packages:
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -622,7 +622,7 @@ tests/
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>

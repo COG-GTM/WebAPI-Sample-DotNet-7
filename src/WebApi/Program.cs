@@ -11,24 +11,25 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Database
-builder.Services.AddDbContext<SampleDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), o => o.UseNodaTime()));
-builder.Services.AddHealthChecks().AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection"), name: "SampleDB");
+// Database: fail fast at startup if the connection string is not configured
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
+builder.Services.AddDbContext<SampleDbContext>(options => options.UseNpgsql(connectionString, o => o.UseNodaTime()));
+builder.Services.AddHealthChecks().AddNpgSql(connectionString, name: "SampleDB");
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEducationService, EducationService>();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Built-in OpenAPI document generation (replaces Swashbuckle). Learn more at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    // Serves the generated OpenAPI document at /openapi/v1.json
+    app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
