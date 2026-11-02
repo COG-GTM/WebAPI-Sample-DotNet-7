@@ -1,8 +1,12 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+# .NET 7 is EOL and its images are no longer rebuilt; use the Debian 12 variant and apply OS security updates at build time.
+FROM mcr.microsoft.com/dotnet/aspnet:7.0-bookworm-slim AS base
+RUN apt-get update \
+    && apt-get upgrade -y --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 EXPOSE 5000
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0-bookworm-slim AS build
 RUN pwd && ls /
 WORKDIR /src
 COPY ["src/WebApi/WebApi.csproj", "src/WebApi/"]
