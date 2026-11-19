@@ -1,0 +1,13 @@
+{
+  "body": {
+    "degree": "Bachelor's degree",
+    "description": null,
+    "fieldOfStudy": "Software engineering",
+    "id": "c92ea179-dd5c-46ca-b7b5-b44a191b974c",
+    "school": "Sample university"
+  },
+  "contentType": "application/json",
+  "name": "03_get_seed_by_id",
+  "request": "GET /api/Educations/c92ea179-dd5c-46ca-b7b5-b44a191b974c",
+  "status": 200
+}

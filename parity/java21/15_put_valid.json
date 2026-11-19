@@ -1,0 +1,7 @@
+{
+  "body": null,
+  "contentType": null,
+  "name": "15_put_valid",
+  "request": "PUT /api/Educations/<CREATED_ID>",
+  "status": 200
+}

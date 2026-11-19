@@ -1,0 +1,9 @@
+# Local development profile (SPRING_PROFILES_ACTIVE=dev): enables Swagger UI, like ASPNETCORE_ENVIRONMENT=Development did.
+# Provide the database password with SPRING_DATASOURCE_PASSWORD.
+springdoc:
+  api-docs:
+    enabled: true
+    path: /swagger/v1/swagger.json
+  swagger-ui:
+    enabled: true
+    path: /swagger
