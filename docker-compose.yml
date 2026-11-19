@@ -1,49 +1,58 @@
+# Requires a .env file (cp .env.example .env).
 services:
   webapi:
     container_name: webapi_container
     ports:
       - "5000:5000"
     depends_on:
-      - postgres_db
+      postgres_db:
+        condition: service_healthy
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=User ID=sara;Password=mysecretpassword;Server=postgres_container;Port=5432;Database=SampleDB;IntegratedSecurity=true;Pooling=true;
-      - ASPNETCORE_URLS=http://+:5000
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_container:5432/SampleDB
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:?set POSTGRES_USER in .env}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
     networks:
       - dev_network
   postgres_db:
     container_name: postgres_container
-    image: postgres
+    image: postgres:16
     environment:
-      POSTGRES_USER: sara
-      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: SampleDB
       PGDATA: /data/postgres
     volumes:
-       - postgres_data:/data/postgres
+      - postgres_data:/data/postgres
     ports:
       - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d SampleDB"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
     networks:
       - dev_network
     restart: unless-stopped
-  
+
   pgadmin:
     container_name: pgadmin_container
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: mysecretpassword
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:?set PGADMIN_DEFAULT_EMAIL in .env}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:?set PGADMIN_DEFAULT_PASSWORD in .env}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
       - pgadmin_data:/var/lib/pgadmin
-
     ports:
       - "8080:80"
     networks:
       - dev_network
     restart: unless-stopped
-    
+
 networks:
   dev_network:
     driver: bridge

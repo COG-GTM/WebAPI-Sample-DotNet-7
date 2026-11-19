@@ -1,0 +1,189 @@
+openapi: 3.1.0
+info:
+  title: WebApi
+  version: "v1"
+  description: |
+    Educations API (Java 21 / Spring Boot port of the original ASP.NET Core .NET 7 sample).
+    Route matching is case-insensitive (`/api/educations` is equivalent to `/api/Educations`).
+    Error responses use RFC 7807 problem details (`application/problem+json`).
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: http://localhost:5000
+tags:
+  - name: Educations
+paths:
+  /api/Educations:
+    get:
+      tags: [Educations]
+      operationId: listEducations
+      summary: List all education records
+      responses:
+        "200":
+          description: All education records.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EducationDto"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    post:
+      tags: [Educations]
+      operationId: createEducation
+      summary: Create an education record
+      description: A new id is always generated; any `id` sent in the body is ignored. Returns 200 (not 201) with the created record.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EducationDto"
+      responses:
+        "200":
+          description: The created record.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EducationDto"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /api/Educations/{id}:
+    parameters:
+      - $ref: "#/components/parameters/EducationId"
+    get:
+      tags: [Educations]
+      operationId: getEducation
+      summary: Get an education record by id
+      responses:
+        "200":
+          description: The record.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EducationDto"
+        "204":
+          description: No record exists with this id.
+        "404":
+          $ref: "#/components/responses/InvalidId"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    put:
+      tags: [Educations]
+      operationId: updateEducation
+      summary: Replace an education record
+      description: The `id` in the body must equal the path id. All fields, including `description`, are replaced.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EducationDto"
+      responses:
+        "200":
+          description: Updated (empty body).
+        "400":
+          description: Validation failed, the body id does not match the path id, or no record exists.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "404":
+          $ref: "#/components/responses/InvalidId"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    delete:
+      tags: [Educations]
+      operationId: deleteEducation
+      summary: Delete an education record
+      responses:
+        "200":
+          description: Deleted (empty body).
+        "400":
+          description: No record exists with this id.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "404":
+          $ref: "#/components/responses/InvalidId"
+        "500":
+          $ref: "#/components/responses/ServerError"
+components:
+  parameters:
+    EducationId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    InvalidId:
+      description: The id is not a valid UUID (empty body).
+    ValidationError:
+      description: The body is missing, is not valid JSON, or a required field is missing or null.
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    UnsupportedMediaType:
+      description: The request content type is not application/json.
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    ServerError:
+      description: Unexpected error, including database constraint violations (e.g. `degree` longer than 50 characters).
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+  schemas:
+    EducationDto:
+      type: object
+      required: [degree, fieldOfStudy, school]
+      properties:
+        id:
+          type: string
+          format: uuid
+        degree:
+          type: string
+          maxLength: 50
+          description: Must be present and non-null (empty strings are accepted). Values longer than 50 characters are rejected by the database (500).
+        fieldOfStudy:
+          type: string
+          maxLength: 250
+        school:
+          type: string
+          maxLength: 250
+        description:
+          type: [string, "null"]
+          maxLength: 1000
+    ProblemDetails:
+      type: object
+      required: [status, title]
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        traceId:
+          type: string
+        errors:
+          type: object
+          description: Validation messages keyed by field name.
+          additionalProperties:
+            type: array
+            items:
+              type: string

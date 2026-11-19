@@ -1,0 +1,12 @@
+{
+  "body": {
+    "status": 500,
+    "title": "An error occurred while processing your request.",
+    "traceId": "<masked>",
+    "type": "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+  },
+  "contentType": "application/problem+json",
+  "name": "14_post_degree_too_long",
+  "request": "POST /api/Educations",
+  "status": 500
+}

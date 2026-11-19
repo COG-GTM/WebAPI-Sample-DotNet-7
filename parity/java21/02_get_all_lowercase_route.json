@@ -1,0 +1,15 @@
+{
+  "body": [
+    {
+      "degree": "Bachelor's degree",
+      "description": null,
+      "fieldOfStudy": "Software engineering",
+      "id": "c92ea179-dd5c-46ca-b7b5-b44a191b974c",
+      "school": "Sample university"
+    }
+  ],
+  "contentType": "application/json",
+  "name": "02_get_all_lowercase_route",
+  "request": "GET /api/educations",
+  "status": 200
+}

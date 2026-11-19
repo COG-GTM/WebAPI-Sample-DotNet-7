@@ -1,0 +1,17 @@
+{
+  "body": {
+    "errors": {
+      "degree": [
+        "The degree field is required."
+      ]
+    },
+    "status": 400,
+    "title": "One or more validation errors occurred.",
+    "traceId": "<masked>",
+    "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+  },
+  "contentType": "application/problem+json",
+  "name": "08_post_missing_degree",
+  "request": "POST /api/Educations",
+  "status": 400
+}

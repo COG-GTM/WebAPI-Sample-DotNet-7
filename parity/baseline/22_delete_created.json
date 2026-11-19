@@ -1,0 +1,7 @@
+{
+  "body": null,
+  "contentType": null,
+  "name": "22_delete_created",
+  "request": "DELETE /api/Educations/<CREATED_ID>",
+  "status": 200
+}

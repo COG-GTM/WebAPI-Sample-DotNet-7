@@ -1,0 +1,13 @@
+{
+  "body": {
+    "degree": "PhD",
+    "description": null,
+    "fieldOfStudy": "Computer science",
+    "id": "<CREATED_ID>",
+    "school": "Parity university"
+  },
+  "contentType": "application/json",
+  "name": "16_get_after_update",
+  "request": "GET /api/Educations/<CREATED_ID>",
+  "status": 200
+}

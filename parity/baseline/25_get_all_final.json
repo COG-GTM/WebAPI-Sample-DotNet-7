@@ -1,0 +1,22 @@
+{
+  "body": [
+    {
+      "degree": "   ",
+      "description": "Created by parity harness",
+      "fieldOfStudy": "Computer science",
+      "id": "<GENERATED_ID>",
+      "school": "Parity university"
+    },
+    {
+      "degree": "Bachelor's degree",
+      "description": null,
+      "fieldOfStudy": "Software engineering",
+      "id": "c92ea179-dd5c-46ca-b7b5-b44a191b974c",
+      "school": "Sample university"
+    }
+  ],
+  "contentType": "application/json",
+  "name": "25_get_all_final",
+  "request": "GET /api/Educations",
+  "status": 200
+}

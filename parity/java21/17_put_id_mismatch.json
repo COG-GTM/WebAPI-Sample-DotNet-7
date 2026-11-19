@@ -1,0 +1,12 @@
+{
+  "body": {
+    "status": 400,
+    "title": "Bad Request",
+    "traceId": "<masked>",
+    "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+  },
+  "contentType": "application/problem+json",
+  "name": "17_put_id_mismatch",
+  "request": "PUT /api/Educations/<CREATED_ID>",
+  "status": 400
+}

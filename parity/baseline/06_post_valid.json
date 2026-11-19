@@ -1,0 +1,13 @@
+{
+  "body": {
+    "degree": "Master's degree",
+    "description": "Created by parity harness",
+    "fieldOfStudy": "Computer science",
+    "id": "<CREATED_ID>",
+    "school": "Parity university"
+  },
+  "contentType": "application/json",
+  "name": "06_post_valid",
+  "request": "POST /api/Educations",
+  "status": 200
+}
