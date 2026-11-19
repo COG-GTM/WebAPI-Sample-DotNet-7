@@ -1,0 +1,12 @@
+{
+  "body": {
+    "status": 400,
+    "title": "Bad Request",
+    "traceId": "<masked>",
+    "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+  },
+  "contentType": "application/problem+json",
+  "name": "23_delete_again",
+  "request": "DELETE /api/Educations/<CREATED_ID>",
+  "status": 400
+}

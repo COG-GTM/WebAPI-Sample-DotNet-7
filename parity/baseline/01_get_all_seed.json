@@ -1,0 +1,12 @@
+{
+  "body": {
+    "status": 500,
+    "title": "An error occurred while processing your request.",
+    "traceId": "<masked>",
+    "type": "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+  },
+  "contentType": "application/problem+json",
+  "name": "01_get_all_seed",
+  "request": "GET /api/Educations",
+  "status": 500
+}

@@ -1,0 +1,20 @@
+{
+  "body": {
+    "errors": {
+      "$": [
+        "'n' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+      ],
+      "model": [
+        "The model field is required."
+      ]
+    },
+    "status": 400,
+    "title": "One or more validation errors occurred.",
+    "traceId": "<masked>",
+    "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+  },
+  "contentType": "application/problem+json",
+  "name": "12_post_malformed_json",
+  "request": "POST /api/Educations",
+  "status": 400
+}

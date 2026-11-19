@@ -1,0 +1,20 @@
+{
+  "body": {
+    "errors": {
+      "$": [
+        "JSON deserialization for type 'Application.Dtos.EducationDto' was missing required properties, including the following: school"
+      ],
+      "model": [
+        "The model field is required."
+      ]
+    },
+    "status": 400,
+    "title": "One or more validation errors occurred.",
+    "traceId": "<masked>",
+    "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+  },
+  "contentType": "application/problem+json",
+  "name": "20_put_missing_field",
+  "request": "PUT /api/Educations/<CREATED_ID>",
+  "status": 400
+}

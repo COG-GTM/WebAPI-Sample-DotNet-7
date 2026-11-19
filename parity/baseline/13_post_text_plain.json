@@ -1,0 +1,12 @@
+{
+  "body": {
+    "status": 415,
+    "title": "Unsupported Media Type",
+    "traceId": "<masked>",
+    "type": "https://tools.ietf.org/html/rfc7231#section-6.5.13"
+  },
+  "contentType": "application/problem+json",
+  "name": "13_post_text_plain",
+  "request": "POST /api/Educations",
+  "status": 415
+}

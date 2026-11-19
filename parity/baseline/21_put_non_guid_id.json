@@ -1,0 +1,7 @@
+{
+  "body": null,
+  "contentType": null,
+  "name": "21_put_non_guid_id",
+  "request": "PUT /api/Educations/not-a-guid",
+  "status": 404
+}
