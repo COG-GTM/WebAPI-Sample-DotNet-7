@@ -110,6 +110,7 @@ function openDialog(record) {
 async function save(ev) {
   ev.preventDefault();
   const form = $("form");
+  for (const k of ["degree", "fieldOfStudy", "school"]) form.elements[k].value = form.elements[k].value.trim();
   if (!form.reportValidity()) return;
   const body = {
     id: editingId || "00000000-0000-0000-0000-000000000000",
