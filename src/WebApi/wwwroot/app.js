@@ -37,14 +37,20 @@ async function checkHealth() {
   }
 }
 
+let loadSeq = 0;
+
 async function load() {
+  const seq = ++loadSeq;
+  let next = [];
+  let error = "";
   try {
-    records = (await request(api)) || [];
-    showError("");
+    next = (await request(api)) || [];
   } catch (e) {
-    showError(`Could not load records (${e.message}).`);
-    records = [];
+    error = `Could not load records (${e.message}).`;
   }
+  if (seq !== loadSeq) return;
+  records = next;
+  showError(error);
   render();
 }
 
