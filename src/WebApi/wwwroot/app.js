@@ -134,15 +134,19 @@ async function save(ev) {
     description: form.elements.description.value.trim() || null,
   };
   $("save").disabled = $("cancel").disabled = true;
+  let saved = false;
   try {
     if (editingId) await request(`${api}/${editingId}`, { method: "PUT", body: JSON.stringify(body) });
     else await request(api, { method: "POST", body: JSON.stringify(body) });
-    $("dialog").close();
-    await load();
+    saved = true;
   } catch (e) {
     showFormError(`Could not save record (${e.message}).`);
   } finally {
     $("save").disabled = $("cancel").disabled = false;
+  }
+  if (saved) {
+    $("dialog").close();
+    await load();
   }
 }
 
