@@ -61,6 +61,7 @@ function render() {
   document.querySelectorAll("th[data-sort]").forEach((th) => {
     th.classList.toggle("asc", th.dataset.sort === sort.key && sort.dir === 1);
     th.classList.toggle("desc", th.dataset.sort === sort.key && sort.dir === -1);
+    th.setAttribute("aria-sort", th.dataset.sort !== sort.key ? "none" : sort.dir === 1 ? "ascending" : "descending");
   });
 
   const tbody = $("rows");
@@ -147,12 +148,20 @@ $("add").onclick = () => openDialog(null);
 $("cancel").onclick = () => $("dialog").close();
 $("form").addEventListener("submit", save);
 $("search").addEventListener("input", render);
-document.querySelectorAll("th[data-sort]").forEach((th) =>
-  th.addEventListener("click", () => {
+document.querySelectorAll("th[data-sort]").forEach((th) => {
+  const toggle = () => {
     sort = { key: th.dataset.sort, dir: sort.key === th.dataset.sort ? -sort.dir : 1 };
     render();
-  })
-);
+  };
+  th.tabIndex = 0;
+  th.addEventListener("click", toggle);
+  th.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggle();
+    }
+  });
+});
 
 checkHealth();
 load();
