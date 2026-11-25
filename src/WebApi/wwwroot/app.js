@@ -71,7 +71,9 @@ function render() {
   });
 
   const tbody = $("rows");
-  tbody.replaceChildren(...rows.map(rowFor));
+  const frag = document.createDocumentFragment();
+  for (const r of rows) frag.appendChild(rowFor(r));
+  tbody.replaceChildren(frag);
   $("empty").hidden = rows.length > 0;
   $("empty").textContent = records.length ? "No records match the filter." : "No records yet. Use “Add record” to create one.";
 }
