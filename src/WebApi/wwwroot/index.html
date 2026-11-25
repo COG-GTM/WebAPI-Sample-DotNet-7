@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Education records</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Education records <span class="muted">· WebAPI Sample (.NET)</span></div>
+    <div id="health" class="health" title="API and database health">checking…</div>
+  </header>
+
+  <main class="wrap">
+    <section class="summary" aria-label="Summary">
+      <div class="stat"><div class="label">Records</div><div class="value mono" id="stat-total">–</div></div>
+      <div class="stat"><div class="label">Schools</div><div class="value mono" id="stat-schools">–</div></div>
+      <div class="stat"><div class="label">Fields of study</div><div class="value mono" id="stat-fields">–</div></div>
+    </section>
+
+    <section class="toolbar">
+      <input id="search" type="search" placeholder="Filter by degree, field, school or description" aria-label="Filter records">
+      <button id="add" class="primary">Add record</button>
+    </section>
+
+    <div id="error" class="error" role="alert" hidden></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th data-sort="degree">Degree</th>
+            <th data-sort="fieldOfStudy">Field of study</th>
+            <th data-sort="school">School</th>
+            <th>Description</th>
+            <th>Id</th>
+            <th class="actions-col"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <p id="empty" class="empty" hidden>No records yet. Use “Add record” to create one.</p>
+    </div>
+  </main>
+
+  <dialog id="dialog">
+    <form id="form" method="dialog">
+      <h2 id="dialog-title">Add record</h2>
+      <div id="form-error" class="error" role="alert" hidden></div>
+      <label>Degree<input name="degree" required maxlength="50"></label>
+      <label>Field of study<input name="fieldOfStudy" required maxlength="250"></label>
+      <label>School<input name="school" required maxlength="250"></label>
+      <label>Description<textarea name="description" rows="3" maxlength="1000"></textarea></label>
+      <div class="form-actions">
+        <button type="button" id="cancel">Cancel</button>
+        <button type="submit" class="primary" id="save">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer class="footer">
+    Backed by <span class="mono">/api/educations</span> on ASP.NET Core + PostgreSQL ·
+    <a href="https://devin-gtm.devinenterprise.com/sessions/f5f17e248cfb435c85b8212f572d3e2f" target="_blank" rel="noopener">Request changes</a>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
