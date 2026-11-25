@@ -133,7 +133,7 @@ async function save(ev) {
     school: form.elements.school.value.trim(),
     description: form.elements.description.value.trim() || null,
   };
-  $("save").disabled = true;
+  $("save").disabled = $("cancel").disabled = true;
   try {
     if (editingId) await request(`${api}/${editingId}`, { method: "PUT", body: JSON.stringify(body) });
     else await request(api, { method: "POST", body: JSON.stringify(body) });
@@ -142,7 +142,7 @@ async function save(ev) {
   } catch (e) {
     showFormError(`Could not save record (${e.message}).`);
   } finally {
-    $("save").disabled = false;
+    $("save").disabled = $("cancel").disabled = false;
   }
 }
 
@@ -158,6 +158,9 @@ async function remove(r) {
 
 $("add").onclick = () => openDialog(null);
 $("cancel").onclick = () => $("dialog").close();
+$("dialog").addEventListener("cancel", (e) => {
+  if ($("save").disabled) e.preventDefault();
+});
 $("form").addEventListener("submit", save);
 $("search").addEventListener("input", render);
 document.querySelectorAll("th[data-sort]").forEach((th) => {
