@@ -63,6 +63,7 @@ dialog { border: 1px solid var(--border); border-radius: var(--radius); padding:
 dialog::backdrop { background: rgba(0, 0, 0, .25); }
 dialog form { display: grid; gap: 10px; padding: 18px; }
 dialog h2 { margin: 0 0 4px; font-size: 16px; }
+dialog .error { margin: 0; }
 dialog label { display: grid; gap: 4px; font-size: 12px; color: var(--text-muted); }
 .form-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
 

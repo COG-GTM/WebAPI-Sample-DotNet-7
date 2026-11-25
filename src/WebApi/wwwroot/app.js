@@ -104,8 +104,15 @@ function rowFor(r) {
   return tr;
 }
 
+function showFormError(msg) {
+  const el = $("form-error");
+  el.textContent = msg || "";
+  el.hidden = !msg;
+}
+
 function openDialog(record) {
   editingId = record ? record.id : null;
+  showFormError("");
   $("dialog-title").textContent = record ? "Edit record" : "Add record";
   const form = $("form");
   form.reset();
@@ -133,8 +140,7 @@ async function save(ev) {
     $("dialog").close();
     await load();
   } catch (e) {
-    showError(`Could not save record (${e.message}).`);
-    $("dialog").close();
+    showFormError(`Could not save record (${e.message}).`);
   } finally {
     $("save").disabled = false;
   }
