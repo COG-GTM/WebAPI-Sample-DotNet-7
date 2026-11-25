@@ -161,18 +161,15 @@ $("cancel").onclick = () => $("dialog").close();
 $("form").addEventListener("submit", save);
 $("search").addEventListener("input", render);
 document.querySelectorAll("th[data-sort]").forEach((th) => {
-  const toggle = () => {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "sort";
+  button.textContent = th.textContent;
+  button.addEventListener("click", () => {
     sort = { key: th.dataset.sort, dir: sort.key === th.dataset.sort ? -sort.dir : 1 };
     render();
-  };
-  th.tabIndex = 0;
-  th.addEventListener("click", toggle);
-  th.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      toggle();
-    }
   });
+  th.replaceChildren(button);
 });
 
 checkHealth();
